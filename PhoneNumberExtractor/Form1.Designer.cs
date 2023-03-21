@@ -34,6 +34,7 @@
             textFolderPath = new TextBox();
             tableLayoutPanel3 = new TableLayoutPanel();
             btnExtract = new Button();
+            folderBrowserDialog1 = new FolderBrowserDialog();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
@@ -77,6 +78,7 @@
             btnBrowse.TabIndex = 0;
             btnBrowse.Text = "...";
             btnBrowse.UseVisualStyleBackColor = true;
+            btnBrowse.Click += btnBrowse_Click;
             // 
             // textFolderPath
             // 
@@ -109,6 +111,7 @@
             btnExtract.TabIndex = 0;
             btnExtract.Text = "Extract";
             btnExtract.UseVisualStyleBackColor = true;
+            btnExtract.Click += btnExtract_Click;
             // 
             // Form1
             // 
@@ -135,5 +138,6 @@
         private TextBox textFolderPath;
         private TableLayoutPanel tableLayoutPanel3;
         private Button btnExtract;
+        private FolderBrowserDialog folderBrowserDialog1;
     }
 }
