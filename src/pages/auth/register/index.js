@@ -1,11 +1,16 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useRouter } from 'src/hooks/use-router';
+import { useMounted } from 'src/hooks/use-mounted';
+
 import {
   Box,
   Button,
   Card,
   CardContent,
   CardHeader,
+  Checkbox,
+  FormHelperText,
   Link,
   Stack,
   TextField,
@@ -17,8 +22,9 @@ import { paths } from 'src/paths';
 
 const initialValues = {
   email: '',
+  name: '',
   password: '',
-  submit: null
+  policy: false
 };
 
 const validationSchema = Yup.object({
@@ -27,22 +33,38 @@ const validationSchema = Yup.object({
     .email('Must be a valid email')
     .max(255)
     .required('Email is required'),
-  password: Yup
+  name: Yup
     .string()
     .max(255)
-    .required('Password is required')
+    .required('Name is required'),
+  password: Yup
+    .string()
+    .min(7)
+    .max(255)
+    .required('Password is required'),
+  policy: Yup
+    .boolean()
+    .oneOf([true], 'This field must be checked')
 });
 
 const Page = () => {
+
+  const router = useRouter();
+  const isMounted = useMounted();
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+    onSubmit: () => { 
+      if (isMounted()) {
+        router.push(paths.auth.verifyCode);
+      }
+    }
   });
 
   return (
     <>
-      <Seo title="Login" />
+      <Seo title="Register" />
       <div>
         <Card elevation={16}>
           <CardHeader
@@ -51,19 +73,19 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Don&apos;t have an account?
+                Already have an account?
                 &nbsp;
                 <Link
-                  href={paths.auth.register}
+                  href={paths.auth.login}
                   underline="hover"
                   variant="subtitle2"
                 >
-                  Register
+                  Log in
                 </Link>
               </Typography>
             )}
             sx={{ pb: 0 }}
-            title="Log in"
+            title="Register"
           />
           <CardContent>
             <form
@@ -72,7 +94,16 @@ const Page = () => {
             >
               <Stack spacing={3}>
                 <TextField
-                  autoFocus
+                  error={!!(formik.touched.name && formik.errors.name)}
+                  fullWidth
+                  helperText={formik.touched.name && formik.errors.name}
+                  label="Name"
+                  name="name"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.name}
+                />
+                <TextField
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                   helperText={formik.touched.email && formik.errors.email}
@@ -95,6 +126,38 @@ const Page = () => {
                   value={formik.values.password}
                 />
               </Stack>
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  ml: -1,
+                  mt: 1
+                }}
+              >
+                <Checkbox
+                  checked={formik.values.policy}
+                  name="policy"
+                  onChange={formik.handleChange}
+                />
+                <Typography
+                  color="text.secondary"
+                  variant="body2"
+                >
+                  I have read the
+                  {' '}
+                  <Link
+                    component="a"
+                    href="#"
+                  >
+                    Terms and Conditions
+                  </Link>
+                </Typography>
+              </Box>
+              {!!(formik.touched.policy && formik.errors.policy) && (
+                <FormHelperText error>
+                  {formik.errors.policy}
+                </FormHelperText>
+              )}
               <Button
                 fullWidth
                 size="large"
@@ -102,23 +165,8 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Log In
+                Register
               </Button>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  mt: 3
-                }}
-              >
-                <Link
-                  href={paths.auth.forgotPassword}
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Forgot password?
-                </Link>
-              </Box>
             </form>
           </CardContent>
         </Card>

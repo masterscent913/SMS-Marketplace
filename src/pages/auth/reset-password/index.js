@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useMounted } from 'src/hooks/use-mounted';
+import { useRouter } from 'src/hooks/use-router';
+
 import {
   Box,
   Button,
@@ -8,6 +11,7 @@ import {
   CardHeader,
   Link,
   Stack,
+  SvgIcon,
   TextField,
   Typography
 } from '@mui/material';
@@ -16,54 +20,44 @@ import { Seo } from 'src/components/seo';
 import { paths } from 'src/paths';
 
 const initialValues = {
-  email: '',
   password: '',
-  submit: null
+  passwordConfirm: ''
 };
 
 const validationSchema = Yup.object({
-  email: Yup
-    .string()
-    .email('Must be a valid email')
-    .max(255)
-    .required('Email is required'),
   password: Yup
     .string()
+    .min(7, 'Must be at least 7 characters')
     .max(255)
-    .required('Password is required')
+    .required('Required'),
+  passwordConfirm: Yup
+    .string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Required')
 });
 
 const Page = () => {
+  const isMounted = useMounted();
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+    onSubmit: () => { 
+      if (isMounted()) {
+        router.push(paths.auth.login);
+      }
+    }
   });
 
   return (
     <>
-      <Seo title="Login" />
+      <Seo title="Reset Password" />
       <div>
         <Card elevation={16}>
           <CardHeader
-            subheader={(
-              <Typography
-                color="text.secondary"
-                variant="body2"
-              >
-                Don&apos;t have an account?
-                &nbsp;
-                <Link
-                  href={paths.auth.register}
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Register
-                </Link>
-              </Typography>
-            )}
             sx={{ pb: 0 }}
-            title="Log in"
+            title="Reset Password"
           />
           <CardContent>
             <form
@@ -71,18 +65,6 @@ const Page = () => {
               onSubmit={formik.handleSubmit}
             >
               <Stack spacing={3}>
-                <TextField
-                  autoFocus
-                  error={!!(formik.touched.email && formik.errors.email)}
-                  fullWidth
-                  helperText={formik.touched.email && formik.errors.email}
-                  label="Email Address"
-                  name="email"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="email"
-                  value={formik.values.email}
-                />
                 <TextField
                   error={!!(formik.touched.password && formik.errors.password)}
                   fullWidth
@@ -94,6 +76,17 @@ const Page = () => {
                   type="password"
                   value={formik.values.password}
                 />
+                <TextField
+                  error={!!(formik.touched.passwordConfirm && formik.errors.passwordConfirm)}
+                  fullWidth
+                  helperText={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
+                  label="Password (Confirm)"
+                  name="passwordConfirm"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  type="password"
+                  value={formik.values.passwordConfirm}
+                />
               </Stack>
               <Button
                 fullWidth
@@ -102,23 +95,8 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Log In
+                Reset
               </Button>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  mt: 3
-                }}
-              >
-                <Link
-                  href={paths.auth.forgotPassword}
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Forgot password?
-                </Link>
-              </Box>
             </form>
           </CardContent>
         </Card>
