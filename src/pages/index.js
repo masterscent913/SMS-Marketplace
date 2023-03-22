@@ -1,5 +1,3 @@
-import { RouterLink } from 'src/components/router-link';
-import { Seo } from 'src/components/seo';
 import { paths } from 'src/paths';
 import { useRouter } from 'src/hooks/use-router';
 import { useAuth } from 'src/hooks/use-auth';

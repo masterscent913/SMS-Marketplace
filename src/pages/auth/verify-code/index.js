@@ -2,7 +2,6 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import {
-  Box,
   Button,
   Card,
   CardContent,
@@ -10,11 +9,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Link,
-  SvgIcon,
-  Typography
 } from '@mui/material';
-import { RouterLink } from 'src/components/router-link';
 import { Seo } from 'src/components/seo';
 import { paths } from 'src/paths';
 import { useRouter } from 'src/hooks/use-router';

@@ -7,10 +7,10 @@ import Error500Page from 'src/pages/500';
 import HomePage from 'src/pages';
 
 const Login = lazy(() => import('src/pages/auth/login'));
-const Register = lazy(() => import('src/pages/auth/register'));
-const ForgotPassword = lazy(() => import('src/pages/auth/forgot'));
-const ResetPassword = lazy(() => import('src/pages/auth/reset-password'));
-const VerifyCode = lazy(() => import('src/pages/auth/verify-code'));
+// const Register = lazy(() => import('src/pages/auth/register'));
+// const ForgotPassword = lazy(() => import('src/pages/auth/forgot'));
+// const ResetPassword = lazy(() => import('src/pages/auth/reset-password'));
+// const VerifyCode = lazy(() => import('src/pages/auth/verify-code'));
 
 export const routes = [
   {
@@ -31,39 +31,39 @@ export const routes = [
         <Login />
       </AuthLayout>
     )
-  },
-  {
-    path: 'register',
-    element: (
-      <AuthLayout>
-        <Register />
-      </AuthLayout>
-    )
-  },
-  {
-    path: 'reset-password',
-    element: (
-      <AuthLayout>
-        <ResetPassword />
-      </AuthLayout>
-    )
-  },
-  {
-    path: 'forgot',
-    element: (
-      <AuthLayout>
-        <ForgotPassword />
-      </AuthLayout>
-    )
-  },
-  {
-    path: 'verify-code',
-    element: (
-      <AuthLayout>
-        <VerifyCode />
-      </AuthLayout>
-    )
-  },
+   },
+  // {
+  //   path: 'register',
+  //   element: (
+  //     <AuthLayout>
+  //       <Register />
+  //     </AuthLayout>
+  //   )
+  // },
+  // {
+  //   path: 'reset-password',
+  //   element: (
+  //     <AuthLayout>
+  //       <ResetPassword />
+  //     </AuthLayout>
+  //   )
+  // },
+  // {
+  //   path: 'forgot',
+  //   element: (
+  //     <AuthLayout>
+  //       <ForgotPassword />
+  //     </AuthLayout>
+  //   )
+  // },
+  // {
+  //   path: 'verify-code',
+  //   element: (
+  //     <AuthLayout>
+  //       <VerifyCode />
+  //     </AuthLayout>
+  //   )
+  // },
   {
     path: '401',
     element: <Error401Page />

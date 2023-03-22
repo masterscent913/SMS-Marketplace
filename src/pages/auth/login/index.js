@@ -14,6 +14,7 @@ import {
 import { RouterLink } from 'src/components/router-link';
 import { Seo } from 'src/components/seo';
 import { paths } from 'src/paths';
+import LoginIcon from '@mui/icons-material/Login';
 
 const initialValues = {
   email: '',
@@ -46,22 +47,23 @@ const Page = () => {
       <div>
         <Card elevation={16}>
           <CardHeader
-            subheader={(
-              <Typography
-                color="text.secondary"
-                variant="body2"
-              >
-                Don&apos;t have an account?
-                &nbsp;
-                <Link
-                  href={paths.auth.register}
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Register
-                </Link>
-              </Typography>
-            )}
+            // subheader={(
+            //   <Typography
+            //     color="text.secondary"
+            //     variant="body2"
+            //   >
+            //     Don&apos;t have an account?
+            //     &nbsp;
+            //     <Link
+            //       href={paths.auth.register}
+            //       underline="hover"
+            //       variant="subtitle2"
+            //     >
+            //       Register
+            //     </Link>
+            //   </Typography>
+            // )}
+            titleTypographyProps={{variant: 'h3'}}
             sx={{ pb: 0 }}
             title="Log in"
           />
@@ -111,13 +113,13 @@ const Page = () => {
                   mt: 3
                 }}
               >
-                <Link
+                {/* <Link
                   href={paths.auth.forgotPassword}
                   underline="hover"
                   variant="subtitle2"
                 >
                   Forgot password?
-                </Link>
+                </Link> */}
               </Box>
             </form>
           </CardContent>
