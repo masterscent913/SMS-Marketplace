@@ -1,5 +1,5 @@
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import * as Yup from "yup";
+import { useFormik } from "formik";
 import {
   Box,
   Button,
@@ -9,42 +9,65 @@ import {
   Link,
   Stack,
   TextField,
-  Typography
-} from '@mui/material';
-import { RouterLink } from 'src/components/router-link';
-import { Seo } from 'src/components/seo';
-import { paths } from 'src/paths';
-import LoginIcon from '@mui/icons-material/Login';
+  Typography,
+} from "@mui/material";
+import { RouterLink } from "src/components/router-link";
+import { Seo } from "src/components/seo";
+import { paths } from "src/paths";
+import LoginIcon from "@mui/icons-material/Login";
+import { useAuth } from "src/hooks/use-auth";
+import { useMounted } from "src/hooks/use-mounted";
+import { usePageView } from "src/hooks/use-page-view";
+import { useSearchParams } from "src/hooks/use-search-params";
 
 const initialValues = {
-  email: '',
-  password: '',
-  submit: null
+  email: "",
+  password: "",
+  submit: null,
 };
 
 const validationSchema = Yup.object({
-  email: Yup
-    .string()
-    .email('Must be a valid email')
+  email: Yup.string()
+    .email("Must be a valid email")
     .max(255)
-    .required('Email is required'),
-  password: Yup
-    .string()
-    .max(255)
-    .required('Password is required')
+    .required("Email is required"),
+  password: Yup.string().max(255).required("Password is required"),
 });
 
 const Page = () => {
+  usePageView();
+  const isMounted = useMounted();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo");
+  const { issuer, signIn } = useAuth();
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+    onSubmit: async (values, helpers) => {
+      try {
+        // await signIn(values.email, values.password);
+        if (isMounted()) {
+          // returnTo could be an absolute path
+          window.location.href = returnTo || paths.dashboard.index;
+        }
+        console.log(isMounted());
+      } catch (err) {
+        console.error(err);
+
+        if (isMounted()) {
+          helpers.setStatus({ success: false });
+          helpers.setErrors({ submit: err.message });
+          helpers.setSubmitting(false);
+        }
+      }
+    },
   });
 
   return (
     <>
       <Seo title="Login" />
       <div>
+        {JSON.stringify(formik.errors)}
         <Card elevation={16}>
           <CardHeader
             // subheader={(
@@ -63,15 +86,12 @@ const Page = () => {
             //     </Link>
             //   </Typography>
             // )}
-            titleTypographyProps={{variant: 'h3'}}
+            titleTypographyProps={{ variant: "h3" }}
             sx={{ pb: 0 }}
             title="Log in"
           />
           <CardContent>
-            <form
-              noValidate
-              onSubmit={formik.handleSubmit}
-            >
+            <form noValidate onSubmit={formik.handleSubmit}>
               <Stack spacing={3}>
                 <TextField
                   autoFocus
@@ -108,9 +128,9 @@ const Page = () => {
               </Button>
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  mt: 3
+                  display: "flex",
+                  justifyContent: "center",
+                  mt: 3,
                 }}
               >
                 {/* <Link

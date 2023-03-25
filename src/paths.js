@@ -1,13 +1,21 @@
 export const paths = {
-  index: '/',
+  index: "/",
   auth: {
-    forgotPassword: '/forgot',
-    login: '/login',
-    register: '/register',
-    resetPassword: '/reset-password',
-    verifyCode: '/verify-code'
+    forgotPassword: "/forgot",
+    login: "/login",
+    register: "/register",
+    resetPassword: "/reset-password",
+    verifyCode: "/verify-code",
   },
-  401: '/401',
-  404: '/404',
-  500: '/500'
+  dashboard: {
+    index: "/dashboard",
+    numbers: "/dashboard/numbers",
+    importNumbers: "/dashboard/import-numbers",
+    sendSMS: "/dashboard/send-sms",
+    smsHistory: "/dashboard/sms-history",
+    paymentMethod: "/dashboard/payment-method",
+  },
+  401: "/401",
+  404: "/404",
+  500: "/500",
 };

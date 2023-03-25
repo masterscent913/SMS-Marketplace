@@ -1,12 +1,25 @@
-import { Outlet } from 'react-router-dom';
-import { lazy } from 'react';
-import { Layout as AuthLayout } from 'src/layouts/auth/index';
-import Error401Page from 'src/pages/401';
-import Error404Page from 'src/pages/404';
-import Error500Page from 'src/pages/500';
-import HomePage from 'src/pages';
+import { Outlet } from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { Layout as AuthLayout } from "src/layouts/auth/index";
+import { Layout as DashboardLayout } from "src/layouts/dashboard";
 
-const Login = lazy(() => import('src/pages/auth/login'));
+import Error401Page from "src/pages/401";
+import Error404Page from "src/pages/404";
+import Error500Page from "src/pages/500";
+import HomePage from "src/pages";
+
+const Login = lazy(() => import("src/pages/auth/login"));
+const NumbersPage = lazy(() => import("src/pages/dashboard/numbers"));
+const ImportNumbersPage = lazy(() =>
+  import("src/pages/dashboard/importNumbers")
+);
+const DashboardPage = lazy(() => import("src/pages/dashboard"));
+const PaymentMethodPage = lazy(() =>
+  import("src/pages/dashboard/paymentMethod")
+);
+const SendSMSPage = lazy(() => import("src/pages/dashboard/sendSMS"));
+const SMSHistoryPage = lazy(() => import("src/pages/dashboard/smsHistory"));
+
 // const Register = lazy(() => import('src/pages/auth/register'));
 // const ForgotPassword = lazy(() => import('src/pages/auth/forgot'));
 // const ResetPassword = lazy(() => import('src/pages/auth/reset-password'));
@@ -14,24 +27,49 @@ const Login = lazy(() => import('src/pages/auth/login'));
 
 export const routes = [
   {
+    path: "dashboard",
     element: (
-      <Outlet />
+      <DashboardLayout>
+        <Suspense>
+          <Outlet />
+        </Suspense>
+      </DashboardLayout>
     ),
     children: [
       {
         index: true,
-        element: <HomePage />
-      }
-    ]
+        element: <DashboardPage />,
+      },
+      {
+        path: "import-numbers",
+        element: <ImportNumbersPage />,
+      },
+      {
+        path: "numbers",
+        element: <NumbersPage />,
+      },
+      {
+        path: "send-sms",
+        element: <SendSMSPage />,
+      },
+      {
+        path: "sms-history",
+        element: <SMSHistoryPage />,
+      },
+      {
+        path: "payment-method",
+        element: <PaymentMethodPage />,
+      },
+    ],
   },
   {
-    path: 'login',
+    path: "login",
     element: (
       <AuthLayout>
         <Login />
       </AuthLayout>
-    )
-   },
+    ),
+  },
   // {
   //   path: 'register',
   //   element: (
@@ -65,19 +103,19 @@ export const routes = [
   //   )
   // },
   {
-    path: '401',
-    element: <Error401Page />
+    path: "401",
+    element: <Error401Page />,
   },
   {
-    path: '404',
-    element: <Error404Page />
+    path: "404",
+    element: <Error404Page />,
   },
   {
-    path: '500',
-    element: <Error500Page />
+    path: "500",
+    element: <Error500Page />,
   },
   {
-    path: '*',
-    element: <Error404Page />
-  }
+    path: "*",
+    element: <Error404Page />,
+  },
 ];
