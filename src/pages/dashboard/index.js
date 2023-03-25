@@ -55,7 +55,7 @@ const Page = () => {
                 <div>
                   <Typography variant="h4">Overview</Typography>
                 </div>
-                <div>
+                {/* <div>
                   <Stack direction="row" spacing={4}>
                     <Button
                       startIcon={
@@ -68,7 +68,7 @@ const Page = () => {
                       New Dashboard
                     </Button>
                   </Stack>
-                </div>
+                </div> */}
               </Stack>
             </Grid>
             <Grid xs={12} md={4}>

@@ -1,89 +1,89 @@
-import PropTypes from 'prop-types';
-import { Box, Card, CardHeader, Tab, Tabs } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Chart } from 'src/components/chart';
+import PropTypes from "prop-types";
+import { Box, Card, CardHeader, Tab, Tabs } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { Chart } from "src/components/chart";
 
 const useChartOptions = () => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: true,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     colors: [
       theme.palette.primary.main,
-      theme.palette.mode === 'dark'
+      theme.palette.mode === "dark"
         ? theme.palette.primary.darkest
-        : theme.palette.primary.light
+        : theme.palette.primary.light,
     ],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     legend: {
       labels: {
-        colors: theme.palette.text.secondary
+        colors: theme.palette.text.secondary,
       },
       onItemClick: {
-        toggleDataSeries: false
+        toggleDataSeries: false,
       },
       onItemHover: {
-        highlightDataSeries: false
-      }
+        highlightDataSeries: false,
+      },
     },
     grid: {
       borderColor: theme.palette.divider,
-      strokeDashArray: 2
+      strokeDashArray: 2,
     },
     plotOptions: {
       bar: {
         borderRadius: 8,
-        columnWidth: '32px'
-      }
+        columnWidth: "32px",
+      },
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
       y: {
-        formatter: (value) => `${value}k events`
-      }
+        formatter: (value) => `${value}k events`,
+      },
     },
     xaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
       categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
       ],
       labels: {
         style: {
-          colors: theme.palette.text.secondary
-        }
-      }
+          colors: theme.palette.text.secondary,
+        },
+      },
     },
     yaxis: {
       labels: {
-        show: false
-      }
-    }
+        show: false,
+      },
+    },
   };
 };
 
@@ -95,21 +95,13 @@ export const OverviewSubscriptionUsage = (props) => {
     <Card>
       <CardHeader
         subheader="Based on the selected period"
-        title="Subscription Usage"
-        action={<Tabs value="year">
-          <Tab
-            label="Year"
-            value="year"
-          />
-          <Tab
-            label="Month"
-            value="month"
-          />
-          <Tab
-            label="Week"
-            value="week"
-          />
-        </Tabs>}
+        title="SMS sent"
+        action={
+          <Tabs value="year">
+            <Tab label="Month" value="month" />
+            <Tab label="Week" value="week" />
+          </Tabs>
+        }
       />
       <Box sx={{ height: 336 }}>
         <Chart
@@ -124,5 +116,5 @@ export const OverviewSubscriptionUsage = (props) => {
 };
 
 OverviewSubscriptionUsage.propTypes = {
-  chartSeries: PropTypes.array.isRequired
+  chartSeries: PropTypes.array.isRequired,
 };

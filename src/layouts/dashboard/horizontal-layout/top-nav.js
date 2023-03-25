@@ -206,7 +206,6 @@ export const TopNav = (props) => {
         <Stack alignItems="center" direction="row" spacing={2}>
           <LanguageSwitch />
           <NotificationsButton />
-          <ContactsButton />
           <AccountButton />
         </Stack>
       </Stack>

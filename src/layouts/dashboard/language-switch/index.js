@@ -5,7 +5,7 @@ import { LanguagePopover } from "./language-popover";
 
 const languages = {
   en: "/assets/flags/flag-uk.svg",
-  de: "/assets/flags/flag-de.svg",
+  fr: "/assets/flags/flag-fr.svg",
   es: "/assets/flags/flag-es.svg",
 };
 
