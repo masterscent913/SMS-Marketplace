@@ -20,11 +20,7 @@ const languageOptions = {
   fr: {
     icon: "/assets/flags/flag-fr.svg",
     label: "France",
-  },
-  es: {
-    icon: "/assets/flags/flag-es.svg",
-    label: "Spanish",
-  },
+  }
 };
 
 export const LanguagePopover = (props) => {

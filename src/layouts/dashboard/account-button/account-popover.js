@@ -25,13 +25,12 @@ import { Issuer } from "src/utils/auth";
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
-  const auth = useAuth();
-  const user = useMockedUser();
-
+  const auth  = useAuth();
+  const { user } = useAuth();
+  console.log(' >>> AccountPopover >>> ', auth);
   const handleLogout = useCallback(async () => {
     try {
       onClose?.();
-      console.log(auth.issuer);
       await auth.signOut();
       router.push(paths.index);
     } catch (err) {
@@ -54,14 +53,14 @@ export const AccountPopover = (props) => {
       {...other}
     >
       <Box sx={{ p: 2 }}>
-        <Typography variant="body1">{user.name}</Typography>
-        <Typography color="text.secondary" variant="body2">
-          demo@devias.io
-        </Typography>
+        {/* <Typography variant="body1">{user.name}</Typography> */}
+        {user != null && (<Typography color="text.secondary" variant="body2">
+          {user.email}
+        </Typography>)}
       </Box>
       <Divider />
-      <Box sx={{ p: 1 }}>
-        {/* <ListItemButton
+      {/*<Box sx={{ p: 1 }}>
+         <ListItemButton
           component={RouterLink}
           href={paths.dashboard.social.profile}
           onClick={onClose}
@@ -106,7 +105,7 @@ export const AccountPopover = (props) => {
               </Typography>
             )}
           />
-        </ListItemButton> */}
+        </ListItemButton> 
         <ListItemButton
           component={RouterLink}
           href={paths.dashboard.index}
@@ -127,7 +126,7 @@ export const AccountPopover = (props) => {
           />
         </ListItemButton>
       </Box>
-      <Divider sx={{ my: "0 !important" }} />
+      <Divider sx={{ my: "0 !important" }} />*/}
       <Box
         sx={{
           display: "flex",
@@ -135,7 +134,7 @@ export const AccountPopover = (props) => {
           justifyContent: "center",
         }}
       >
-        <Button color="inherit" onClick={handleLogout} size="small">
+        <Button color="inherit" onClick={handleLogout} size="small" fullWidth>
           Logout
         </Button>
       </Box>
