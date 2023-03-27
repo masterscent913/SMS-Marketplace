@@ -5,30 +5,27 @@ import { useRouter } from "src/hooks/use-router";
 import { paths } from "src/paths";
 import { Issuer } from "src/utils/auth";
 
-const loginPaths = {
-  // [Issuer.Amplify]: paths.auth.login,
-  // [Issuer.Auth0]: paths.auth.auth0.login,
-  // [Issuer.Firebase]: paths.auth.firebase.login,
-  [Issuer.JWT]: paths.auth.login,
-};
+const loginPaths = paths.auth.login;
 
 export const AuthGuard = (props) => {
   const { children } = props;
   const router = useRouter();
-  const { isAuthenticated, issuer } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [checked, setChecked] = useState(false);
+  console.log('>>> isAuthenciated >>>', isAuthenticated);
 
   const check = useCallback(() => {
     if (!isAuthenticated) {
       const searchParams = new URLSearchParams({
         returnTo: window.location.href,
       }).toString();
-      const href = loginPaths[issuer] + `?${searchParams}`;
+      const href = loginPaths + `?${searchParams}`;
+      console.log('>>> href >>>', href, loginPaths);
       router.replace(href);
     } else {
       setChecked(true);
     }
-  }, [isAuthenticated, issuer, router]);
+  }, [isAuthenticated, router]);
 
   // Only check on mount, this allows us to redirect the user manually when auth state changes
   useEffect(
