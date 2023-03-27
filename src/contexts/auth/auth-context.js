@@ -13,7 +13,7 @@ var ActionType;
 })(ActionType || (ActionType = {}));
 
 const initialState = {
-  isAuthenticated: true,
+  isAuthenticated: false,
   isInitialized: false,
   user: null,
 };
@@ -115,6 +115,7 @@ export const AuthProvider = (props) => {
     async (email, password) => {
       const { accessToken } = await authApi.signIn({ email, password });
       const user = await authApi.me({ accessToken });
+      console.log(' >>> user >>> ', user);
 
       sessionStorage.setItem(STORAGE_KEY, accessToken);
 

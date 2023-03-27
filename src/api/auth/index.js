@@ -1,39 +1,40 @@
-import { wait } from 'src/utils/wait';
+import { wait } from 'src/utils/wait'
+import jwt_decode from 'jwt-decode';
 
-const STORAGE_KEY = 'users';
+const STORAGE_KEY = 'users'
 
 // NOTE: We use sessionStorage since memory storage is lost after page reload.
 //  This should be replaced with a server call that returns DB persisted data.
 
 const getPersistedUsers = () => {
   try {
-    const data = sessionStorage.getItem(STORAGE_KEY);
+    const data = sessionStorage.getItem(STORAGE_KEY)
 
     if (!data) {
-      return null;
+      return null
     }
 
-    return JSON.parse(data);
+    return JSON.parse(data)
   } catch (err) {
-    console.error(err);
-    return [];
+    console.error(err)
+    return []
   }
-};
+}
 
-const persistUser = (user) => {
+const persistUser = user => {
   try {
-    const data = JSON.stringify(user);
-    sessionStorage.setItem(STORAGE_KEY, data);
+    const data = JSON.stringify(user)
+    sessionStorage.setItem(STORAGE_KEY, data)
   } catch (err) {
-    console.error(err);
+    console.error(err)
   }
-};
+}
 
 class AuthApi {
-  async signIn(request) {
-    const { email, password } = request;
+  async signIn (request) {
+    const { email, password } = request
 
-    await wait(500);
+    await wait(500)
 
     return new Promise((resolve, reject) => {
       try {
@@ -50,30 +51,30 @@ class AuthApi {
         // // Create the access token
         // const accessToken = sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
-        resolve(0);
+        resolve({
+          accessToken:
+            'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJFbWFpbCI6InRlc3RAZ21haWwuY29tIiwiSXNzdWVyIjoiSXNzdWVyIiwiZXhwIjoxNjc5NzUxNjY1LCJpYXQiOjE2Nzg4ODc2NjV9.QHvX6LWsCVeQYJKqEb2044aEbQZnva0GyTy_EKrrFTM'
+        })
       } catch (err) {
-        console.error('[Auth Api]: ', err);
-        reject(new Error('Internal server error'));
+        console.error('[Auth Api]: ', err)
+        reject(new Error('Internal server error'))
       }
-    });
+    })
   }
 
-  async signUp(request) {
-    const { email, name, password } = request;
+  async signUp (request) {
+    const { email, name, password } = request
 
-    await wait(1000);
+    await wait(1000)
 
     return new Promise((resolve, reject) => {
       try {
-        
         // Check if a user already exists
         // let user = mergedUsers.find((user) => user.email === email);
-
         // if (user) {
         //   reject(new Error('User already exists'));
         //   return;
         // }
-
         // user = {
         //   id: createResourceId(),
         //   avatar: undefined,
@@ -82,49 +83,43 @@ class AuthApi {
         //   password,
         //   plan: 'Standard'
         // };
-
         // persistUser(user);
-
         // const accessToken = sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-
         // resolve({ accessToken });
       } catch (err) {
-        console.error('[Auth Api]: ', err);
-        reject(new Error('Internal server error'));
+        console.error('[Auth Api]: ', err)
+        reject(new Error('Internal server error'))
       }
-    });
+    })
   }
 
-  me(request) {
-    const { accessToken } = request;
+  me (request) {
+    const { accessToken } = request
 
     return new Promise((resolve, reject) => {
       try {
         // Decode access token
-        // const decodedToken = decode(accessToken);
-
+        const decodedToken = jwt_decode(accessToken)
+        console.log(' >>> decodeToken >>> ', decodedToken);
         // // Find the user
-        // const { userId } = decodedToken;
+        const { Email, Role } = decodedToken;
+        
         // const user = mergedUsers.find((user) => user.id === userId);
 
         // if (!user) {
-        //   reject(new Error('Invalid authorization token'));
-        //   return;
+
         // }
 
-        // resolve({
-        //   id: user.id,
-        //   avatar: user.avatar,
-        //   email: user.email,
-        //   name: user.name,
-        //   plan: user.plan
-        // });
+        resolve({
+          email: Email,
+          role: Role
+        });
       } catch (err) {
-        console.error('[Auth Api]: ', err);
-        reject(new Error('Internal server error'));
+        console.error('[Auth Api]: ', err)
+        reject(new Error('Internal server error'))
       }
-    });
+    })
   }
 }
 
-export const authApi = new AuthApi();
+export const authApi = new AuthApi()

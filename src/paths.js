@@ -1,6 +1,7 @@
 export const paths = {
   index: "/",
   auth: {
+    index: "/auth",
     forgotPassword: "/forgot",
     login: "/login",
     register: "/register",

@@ -13,16 +13,6 @@ import { Toaster } from "./components/toaster";
 import CssBaseline from "@mui/material/CssBaseline";
 import { routes } from "./routes";
 import { useNprogress } from "./hooks/use-nprogress";
-// Remove if react-quill is not used
-import "react-quill/dist/quill.snow.css";
-// Remove if react-draft-wysiwyg is not used
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-// Remove if simplebar is not used
-import "simplebar-react/dist/simplebar.min.css";
-// Remove if mapbox is not used
-import "mapbox-gl/dist/mapbox-gl.css";
-// Remove if locales are not used
-import "./locales/i18n";
 
 export const App = () => {
   useNprogress();

@@ -19,6 +19,7 @@ import { useAuth } from "src/hooks/use-auth";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { useSearchParams } from "src/hooks/use-search-params";
+import { useRouter } from "src/hooks/use-router";
 
 const initialValues = {
   email: "",
@@ -39,16 +40,19 @@ const Page = () => {
   const isMounted = useMounted();
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("returnTo");
+  console.log(' >>> returnTo >>> ', returnTo);
   const { issuer, signIn } = useAuth();
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        // await signIn(values.email, values.password);
+        await signIn(values.email, values.password);
         if (isMounted()) {
           // returnTo could be an absolute path
-          window.location.href = returnTo || paths.dashboard.index;
+          router.push(paths.dashboard.index);
         }
         console.log(isMounted());
       } catch (err) {
@@ -67,7 +71,6 @@ const Page = () => {
     <>
       <Seo title="Login" />
       <div>
-        {JSON.stringify(formik.errors)}
         <Card elevation={16}>
           <CardHeader
             // subheader={(
