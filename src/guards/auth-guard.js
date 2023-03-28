@@ -4,24 +4,25 @@ import { useAuth } from "src/hooks/use-auth";
 import { useRouter } from "src/hooks/use-router";
 import { paths } from "src/paths";
 import { Issuer } from "src/utils/auth";
+import { withAuthGuard } from "src/hocs/with-auth-guard";
 
 const loginPaths = paths.auth.login;
 
 export const AuthGuard = (props) => {
   const { children } = props;
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [checked, setChecked] = useState(false);
-  console.log('>>> isAuthenciated >>>', isAuthenticated);
+  // console.log(">>> isAuthenciated >>>", isAuthenticated);
 
   const check = useCallback(() => {
     if (!isAuthenticated) {
-      const searchParams = new URLSearchParams({
-        returnTo: window.location.href,
-      }).toString();
-      const href = loginPaths + `?${searchParams}`;
-      console.log('>>> href >>>', href, loginPaths);
-      router.replace(href);
+      // console.log("nati", user, isAuthenticated);
+      // const searchParams = new URLSearchParams({
+      //   returnTo: window.location.href,
+      // }).toString();
+      // const href = loginPaths + `?${searchParams}`;
+      // router.replace(href);
     } else {
       setChecked(true);
     }
@@ -33,12 +34,12 @@ export const AuthGuard = (props) => {
       check();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [check]
   );
 
-  // if (!checked) {
-  //   return null;
-  // }
+  if (!checked) {
+    return null;
+  }
 
   // If got here, it means that the redirect did not occur, and that tells us that the user is
   // authenticated / authorized.

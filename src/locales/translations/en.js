@@ -7,6 +7,11 @@ export const en = {
   [tokens.nav.paymentMethod]: "Payment Method",
   [tokens.nav.importNumbers]: "Import Numbers",
 
+  [tokens.nav.admin]: "Overview",
+  [tokens.nav.clients]: "Clients",
+  [tokens.nav.smsSummary]: "SMS Summary",
+  [tokens.nav.paymentSummary]: "Payment Summary",
+
   [tokens.common.languageChanged]: "Language changed",
   [tokens.nav.academy]: "Academy",
   [tokens.nav.account]: "Account",

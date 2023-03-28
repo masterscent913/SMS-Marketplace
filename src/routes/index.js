@@ -1,18 +1,19 @@
-import { authRoutes } from './auth'
-import { lazy } from 'react'
-import { dashboardRoutes } from './dashboard'
-import { Layout as AuthLayout } from 'src/layouts/auth'
-import HomePage from 'src/pages'
-import { Outlet } from 'react-router-dom'
-import Error401Page from 'src/pages/401'
-import Error404Page from 'src/pages/404'
-import Error500Page from 'src/pages/500'
-import { GuestGuard } from 'src/guards/guest-guard'
-const LoginPage = lazy(() => import('src/pages/auth/login'))
+import { authRoutes } from "./auth";
+import { lazy } from "react";
+import { adminRoutes } from "./admin";
+import { dashboardRoutes } from "./dashboard";
+import { Layout as AuthLayout } from "src/layouts/auth";
+import HomePage from "src/pages";
+import { Outlet } from "react-router-dom";
+import Error401Page from "src/pages/401";
+import Error404Page from "src/pages/404";
+import Error500Page from "src/pages/500";
+import { GuestGuard } from "src/guards/guest-guard";
+const LoginPage = lazy(() => import("src/pages/auth/login"));
 
 export const routes = [
   {
-    path: '/',
+    path: "/",
     element: (
       <GuestGuard>
         <AuthLayout>
@@ -23,26 +24,27 @@ export const routes = [
     children: [
       {
         index: true,
-        element: <HomePage />
-      }
-    ]
+        element: <HomePage />,
+      },
+    ],
   },
   ...authRoutes,
   ...dashboardRoutes,
+  ...adminRoutes,
   {
-    path: '401',
-    element: <Error401Page />
+    path: "401",
+    element: <Error401Page />,
   },
   {
-    path: '404',
-    element: <Error404Page />
+    path: "404",
+    element: <Error404Page />,
   },
   {
-    path: '500',
-    element: <Error500Page />
+    path: "500",
+    element: <Error500Page />,
   },
   {
-    path: '*',
-    element: <Error404Page />
-  }
-]
+    path: "*",
+    element: <Error404Page />,
+  },
+];

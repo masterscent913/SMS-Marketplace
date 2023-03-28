@@ -16,6 +16,12 @@ export const paths = {
     smsHistory: "/dashboard/sms-history",
     paymentMethod: "/dashboard/payment-method",
   },
+  admin: {
+    index: "/admin",
+    clients: "/admin/clients",
+    smsSummary: "/admin/sms-summary",
+    paymentSummary: "/admin/payment-summary",
+  },
   401: "/401",
   404: "/404",
   500: "/500",

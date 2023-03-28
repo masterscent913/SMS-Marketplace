@@ -1,14 +1,14 @@
 import PropTypes from "prop-types";
-import { withAuthGuard } from "src/hocs/with-auth-guard";
 import { useSettings } from "src/hooks/use-settings";
 import { useSections } from "./config";
 import { HorizontalLayout } from "../common/horizontal-layout";
 import { VerticalLayout } from "../common/vertical-layout";
+import { withAdminGuard } from "src/hocs/with-admin-guard";
 
-export const Layout = withAuthGuard((props) => {
+const AdminDashboardLayout = withAdminGuard((props) => {
+  console.log("nati");
   const settings = useSettings();
   const sections = useSections();
-
   if (settings.layout === "horizontal") {
     return (
       <HorizontalLayout
@@ -27,7 +27,7 @@ export const Layout = withAuthGuard((props) => {
     />
   );
 });
-
-Layout.propTypes = {
+export default AdminDashboardLayout;
+AdminDashboardLayout.propTypes = {
   children: PropTypes.node,
 };
