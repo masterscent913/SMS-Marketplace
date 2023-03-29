@@ -18,6 +18,7 @@ import { usePageView } from "src/hooks/use-page-view";
 import { paths } from "src/paths";
 import { ClientEditForm } from "src/sections/admin/client/client-edit-form";
 import { getInitials } from "src/utils/get-initials";
+import { ClientCreateForm } from "src/sections/admin/client/client-create-form";
 
 const useClient = () => {
   const isMounted = useMounted();
@@ -57,7 +58,7 @@ const Page = () => {
 
   return (
     <>
-      <Seo title="Dashboard: Client Edit" />
+      <Seo title="Dashboard: Client Create" />
       <Box
         component="main"
         sx={{
@@ -85,36 +86,8 @@ const Page = () => {
                   <Typography variant="subtitle2">Clients</Typography>
                 </Link>
               </div>
-              <Stack
-                alignItems="flex-start"
-                direction={{
-                  xs: "column",
-                  md: "row",
-                }}
-                justifyContent="space-between"
-                spacing={4}
-              >
-                <Stack alignItems="center" direction="row" spacing={2}>
-                  <Avatar
-                    src={client.avatar}
-                    sx={{
-                      height: 64,
-                      width: 64,
-                    }}
-                  >
-                    {getInitials(client.name)}
-                  </Avatar>
-                  <Stack spacing={1}>
-                    <Typography variant="h4">{client.email}</Typography>
-                    <Stack alignItems="center" direction="row" spacing={1}>
-                      <Typography variant="subtitle2">user_id:</Typography>
-                      <Chip label={client.id} size="small" />
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </Stack>
             </Stack>
-            <ClientEditForm client={client} />
+            <ClientCreateForm />
           </Stack>
         </Container>
       </Box>

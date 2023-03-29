@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -7,23 +6,19 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Divider,
   Stack,
-  Switch,
   TextField,
-  Typography,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
 import { RouterLink } from "src/components/router-link";
 import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
 
-export const ClientEditForm = (props) => {
-  const { client, ...other } = props;
+export const ClientCreateForm = (props) => {
   const formik = useFormik({
     initialValues: {
-      name: client.name || "",
-      email: client.email || "",
+      name: "",
+      email: "",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -50,9 +45,9 @@ export const ClientEditForm = (props) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} {...other}>
+    <form onSubmit={formik.handleSubmit}>
       <Card>
-        <CardHeader title="Edit Client" />
+        <CardHeader title="Create Client" />
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={3}>
             <Grid xs={12} md={6}>
@@ -111,7 +106,7 @@ export const ClientEditForm = (props) => {
             type="submit"
             variant="contained"
           >
-            Update
+            Create
           </Button>
           <Button
             color="inherit"
@@ -125,8 +120,4 @@ export const ClientEditForm = (props) => {
       </Card>
     </form>
   );
-};
-
-ClientEditForm.propTypes = {
-  client: PropTypes.object.isRequired,
 };

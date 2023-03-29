@@ -142,7 +142,10 @@ export const ClientListTable = (props) => {
                         <Link
                           color="inherit"
                           component={RouterLink}
-                          href={paths.admin.clients.details}
+                          href={paths.admin.clients.details.replace(
+                            ":clientId",
+                            client.id
+                          )}
                           variant="subtitle2"
                         >
                           {client.name}
@@ -163,10 +166,14 @@ export const ClientListTable = (props) => {
                       {client.smsCount}
                     </SeverityPill>
                   </TableCell>
+
                   <TableCell align="right">
                     <IconButton
                       component={RouterLink}
-                      href={paths.admin.clients.edit}
+                      href={paths.admin.clients.edit.replace(
+                        ":clientId",
+                        client.id
+                      )}
                     >
                       <SvgIcon>
                         <Edit02Icon />
@@ -174,7 +181,10 @@ export const ClientListTable = (props) => {
                     </IconButton>
                     <IconButton
                       component={RouterLink}
-                      href={paths.admin.clients.details}
+                      href={paths.admin.clients.details.replace(
+                        ":clientId",
+                        client.id
+                      )}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />

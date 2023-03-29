@@ -6,7 +6,6 @@ import { VerticalLayout } from "../common/vertical-layout";
 import { withAdminGuard } from "src/hocs/with-admin-guard";
 
 const AdminDashboardLayout = withAdminGuard((props) => {
-  console.log("nati");
   const settings = useSettings();
   const sections = useSections();
   if (settings.layout === "horizontal") {

@@ -28,7 +28,7 @@ export const useSections = () => {
           },
           {
             title: t(tokens.nav.clients),
-            path: paths.admin.clients,
+            path: paths.admin.clients.index,
             icon: (
               <SvgIcon fontSize="small">
                 <LineChartUp04Icon />

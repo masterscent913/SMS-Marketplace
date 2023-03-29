@@ -16,8 +16,7 @@ export const ClientDataManagement = (props) => (
       </Button>
       <Box sx={{ mt: 1 }}>
         <Typography color="text.secondary" variant="body2">
-          Remove this number&apos;s chart if he requested that, if not please be
-          aware that what has been deleted can never brought back
+          Remove this client
         </Typography>
       </Box>
     </CardContent>

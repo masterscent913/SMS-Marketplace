@@ -4,43 +4,24 @@ import { PropertyList } from "src/components/property-list";
 import { PropertyListItem } from "src/components/property-list-item";
 
 export const ClientBasicDetails = (props) => {
-  const {
-    address1,
-    address2,
-    country,
-    email,
-    isVerified,
-    phone,
-    state,
-    ...other
-  } = props;
+  const { name, email, smsCount, numbersCount, ...other } = props;
 
   return (
     <Card {...other}>
       <CardHeader title="Basic Details" />
       <PropertyList>
+        <PropertyListItem divider label="Name" value={name} />
         <PropertyListItem divider label="Email" value={email} />
-        <PropertyListItem divider label="Phone" value={phone} />
-        <PropertyListItem divider label="Country" value={country} />
-        <PropertyListItem divider label="State/Region" value={state} />
-        <PropertyListItem divider label="Address 1" value={state} />
-        <PropertyListItem divider label="Address 2" value={address2} />
+        <PropertyListItem divider label="SMS Count" value={smsCount} />
+        <PropertyListItem divider label="Number Count" value={numbersCount} />
       </PropertyList>
-      <CardActions>
-        <Button color="inherit" size="small">
-          Reset Password
-        </Button>
-      </CardActions>
     </Card>
   );
 };
 
 ClientBasicDetails.propTypes = {
-  address1: PropTypes.string,
-  address2: PropTypes.string,
-  country: PropTypes.string,
+  name: PropTypes.string,
+  smsCount: PropTypes.number,
+  numberCount: PropTypes.number,
   email: PropTypes.string.isRequired,
-  isVerified: PropTypes.bool.isRequired,
-  phone: PropTypes.string,
-  state: PropTypes.string,
 };

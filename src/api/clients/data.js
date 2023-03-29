@@ -26,4 +26,6 @@ export const client = {
   name: "John Doe",
   email: "john.doe@gmail.com",
   password: "pass",
+  smsCount: 24,
+  numbersCount: 2,
 };

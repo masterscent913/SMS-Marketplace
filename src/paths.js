@@ -18,7 +18,12 @@ export const paths = {
   },
   admin: {
     index: "/admin",
-    clients: "/admin/clients",
+    clients: {
+      index: "/admin/clients",
+      create: "/admin/clients/create",
+      details: "/admin/clients/:clientId",
+      edit: "/admin/clients/:clientId/edit",
+    },
     smsSummary: "/admin/sms-summary",
     paymentSummary: "/admin/payment-summary",
   },
