@@ -28,7 +28,7 @@ export const useSections = () => {
           },
           {
             title: t(tokens.nav.numbers),
-            path: paths.dashboard.numbers,
+            path: paths.dashboard.numbers.index,
             icon: (
               <SvgIcon fontSize="small">
                 <LineChartUp04Icon />

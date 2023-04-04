@@ -18,6 +18,10 @@ import { usePageView } from "src/hooks/use-page-view";
 import { useSelection } from "src/hooks/use-selection";
 import { NumberListSearch } from "src/sections/dashboard/number/number-list-search";
 import { NumberListTable } from "src/sections/dashboard/number/number-list-table";
+import { paths } from "src/paths";
+
+import axios from 'axios';
+
 
 const useNumbersSearch = () => {
   const [state, setState] = useState({
@@ -84,7 +88,19 @@ const useNumbersStore = (searchState) => {
 
   const handleNumbersGet = useCallback(async () => {
     try {
-      const response = await numbersApi.getNumbers(searchState);
+      const dbresp = await axios.post(
+        'http://localhost:2480/numberquery',
+        {
+          userid:window.name,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+
+      const response = await numbersApi.getNumbers(searchState, dbresp.data);
       if (isMounted()) {
         setState({
           numbers: response.data,
@@ -165,6 +181,7 @@ const Page = () => {
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
+                  href={paths.dashboard.numbers.create}
                   startIcon={
                     <SvgIcon>
                       <PlusIcon />

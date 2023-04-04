@@ -65,9 +65,14 @@ const Page = () => {
           }
         )
 
-        console.log("========Response========", response.status);
+        console.log("========Response status========", response.status);
+        console.log("========Response data========", response.data);
         if(response.status === 200)
         {
+          window.name = response.data['userid'];
+
+          console.log("========global userid========", window.name);
+
           await signIn(values.email, values.password);          
           if (isMounted()) {
             // returnTo could be an absolute path

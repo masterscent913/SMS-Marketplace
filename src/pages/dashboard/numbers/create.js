@@ -18,7 +18,7 @@ import { usePageView } from "src/hooks/use-page-view";
 import { paths } from "src/paths";
 import { ClientEditForm } from "src/sections/admin/client/client-edit-form";
 import { getInitials } from "src/utils/get-initials";
-import { ClientCreateForm } from "src/sections/admin/client/client-create-form";
+import { NumberAddForm } from "src/sections/dashboard/number/number-add-form";
 
 const useClient = () => {
   const isMounted = useMounted();
@@ -58,7 +58,7 @@ const Page = () => {
 
   return (
     <>
-      <Seo title="Dashboard: Client Create" />
+      <Seo title="Dashboard: Add Number" />
       <Box
         component="main"
         sx={{
@@ -83,11 +83,11 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Clients</Typography>
+                  <Typography variant="subtitle2">Numbers</Typography>
                 </Link>
               </div>
             </Stack>
-            <ClientCreateForm />
+            <NumberAddForm />
           </Stack>
         </Container>
       </Box>

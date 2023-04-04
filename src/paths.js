@@ -10,7 +10,12 @@ export const paths = {
   },
   dashboard: {
     index: "/dashboard",
-    numbers: "/dashboard/numbers",
+    numbers: {
+      index: "/dashboard/numbers",
+      create: "/dashboard/numbers/create",
+      details: "/dashboard/numbers/:clientId",
+      edit: "/dashboard/numbers/:clientId/edit",
+    },
     importNumbers: "/dashboard/import-numbers",
     sendSMS: "/dashboard/send-sms",
     smsHistory: "/dashboard/sms-history",

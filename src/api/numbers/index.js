@@ -1,13 +1,17 @@
 import { applyPagination } from "src/utils/apply-pagination";
 import { applySort } from "src/utils/apply-sort";
 import { deepCopy } from "src/utils/deep-copy";
-import { number, numbers, emails, invoices, logs } from "./data";
+import { number, emails, invoices, logs } from "./data";
 
 class NumbersApi {
-  getNumbers(request = {}) {
+  getNumbers(request = {}, data) {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
 
-    let data = deepCopy(numbers);
+    if(data === null){
+      return false;
+    }
+
+//    let data = deepCopy(numbers);
     let count = data.length;
 
     if (typeof filters !== "undefined") {

@@ -17,36 +17,25 @@ import {
   Typography,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
-import { customersApi } from "src/api/numbers";
+import { numbersApi } from "src/api/numbers";
 import { RouterLink } from "src/components/router-link";
 import { Seo } from "src/components/seo";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { paths } from "src/paths";
-import { CustomerBasicDetails } from "src/sections/dashboard/number/number-basic-details";
-import { CustomerDataManagement } from "src/sections/dashboard/number/number-data-management";
-import { CustomerEmailsSummary } from "src/sections/dashboard/number/number-emails-summary";
-import { CustomerInvoices } from "src/sections/dashboard/number/number-invoices";
-import { CustomerPayment } from "src/sections/dashboard/number/number-payment";
-import { CustomerLogs } from "src/sections/dashboard/number/number-logs";
+import { ClientBasicDetails } from "src/sections/admin/client/client-basic-details";
 import { getInitials } from "src/utils/get-initials";
+import { ClientDataManagement } from "src/sections/admin/client/client-data-management";
 
-const tabs = [
-  { label: "Details", value: "details" },
-  { label: "Invoices", value: "invoices" },
-  { label: "Logs", value: "logs" },
-];
-
-const useCustomer = () => {
+const useClient = () => {
   const isMounted = useMounted();
-  const [customer, setCustomer] = useState(null);
+  const [client, setClient] = useState(null);
 
-  const handleCustomerGet = useCallback(async () => {
+  const handleClientGet = useCallback(async () => {
     try {
-      const response = await customersApi.getCustomer();
-
+      const response = await numbersApi.getClient();
       if (isMounted()) {
-        setCustomer(response);
+        setClient(response);
       }
     } catch (err) {
       console.error(err);
@@ -55,88 +44,25 @@ const useCustomer = () => {
 
   useEffect(
     () => {
-      handleCustomerGet();
+      handleClientGet();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  return customer;
-};
-
-const useInvoices = () => {
-  const isMounted = useMounted();
-  const [invoices, setInvoices] = useState([]);
-
-  const handleInvoicesGet = useCallback(async () => {
-    try {
-      const response = await customersApi.getInvoices();
-
-      if (isMounted()) {
-        setInvoices(response);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(
-    () => {
-      handleInvoicesGet();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  return invoices;
-};
-
-const useLogs = () => {
-  const isMounted = useMounted();
-  const [logs, setLogs] = useState([]);
-
-  const handleLogsGet = useCallback(async () => {
-    try {
-      const response = await customersApi.getLogs();
-
-      if (isMounted()) {
-        setLogs(response);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(
-    () => {
-      handleLogsGet();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  return logs;
+  return client;
 };
 
 const Page = () => {
-  const [currentTab, setCurrentTab] = useState("details");
-  const customer = useCustomer();
-  const invoices = useInvoices();
-  const logs = useLogs();
-
+  const client = useClient();
   usePageView();
-
-  const handleTabsChange = useCallback((event, value) => {
-    setCurrentTab(value);
-  }, []);
-
-  if (!customer) {
+  if (!client) {
     return null;
   }
 
   return (
     <>
-      <Seo title="Dashboard: Customer Details" />
+      <Seo title="Dashboard: Client Details" />
       <Box
         component="main"
         sx={{
@@ -151,7 +77,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={RouterLink}
-                  href={paths.dashboard.customers.index}
+                  href={paths.admin.clients.index}
                   sx={{
                     alignItems: "center",
                     display: "inline-flex",
@@ -161,7 +87,7 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Customers</Typography>
+                  <Typography variant="subtitle2">Clients</Typography>
                 </Link>
               </div>
               <Stack
@@ -175,19 +101,19 @@ const Page = () => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Avatar
-                    src={customer.avatar}
+                    src={client.avatar}
                     sx={{
                       height: 64,
                       width: 64,
                     }}
                   >
-                    {getInitials(customer.name)}
+                    {getInitials(client.name)}
                   </Avatar>
                   <Stack spacing={1}>
-                    <Typography variant="h4">{customer.email}</Typography>
+                    <Typography variant="h4">{client.email}</Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="subtitle2">user_id:</Typography>
-                      <Chip label={customer.id} size="small" />
+                      <Chip label={client.id} size="small" />
                     </Stack>
                   </Stack>
                 </Stack>
@@ -200,7 +126,7 @@ const Page = () => {
                         <Edit02Icon />
                       </SvgIcon>
                     }
-                    href={paths.dashboard.customers.edit}
+                    href={paths.admin.clients.edit}
                   >
                     Edit
                   </Button>
@@ -216,51 +142,15 @@ const Page = () => {
                   </Button>
                 </Stack>
               </Stack>
-              <div>
-                <Tabs
-                  indicatorColor="primary"
-                  onChange={handleTabsChange}
-                  scrollButtons="auto"
-                  sx={{ mt: 3 }}
-                  textColor="primary"
-                  value={currentTab}
-                  variant="scrollable"
-                >
-                  {tabs.map((tab) => (
-                    <Tab key={tab.value} label={tab.label} value={tab.value} />
-                  ))}
-                </Tabs>
-                <Divider />
-              </div>
             </Stack>
-            {currentTab === "details" && (
-              <div>
-                <Grid container spacing={4}>
-                  <Grid xs={12} lg={4}>
-                    <CustomerBasicDetails
-                      address1={customer.address1}
-                      address2={customer.address2}
-                      country={customer.country}
-                      email={customer.email}
-                      isVerified={!!customer.isVerified}
-                      phone={customer.phone}
-                      state={customer.state}
-                    />
-                  </Grid>
-                  <Grid xs={12} lg={8}>
-                    <Stack spacing={4}>
-                      <CustomerPayment />
-                      <CustomerEmailsSummary />
-                      <CustomerDataManagement />
-                    </Stack>
-                  </Grid>
+            <div>
+              <Grid container spacing={4}>
+                <Grid xs={12} lg={4}>
+                  <ClientBasicDetails {...client} />
+                  <ClientDataManagement />
                 </Grid>
-              </div>
-            )}
-            {currentTab === "invoices" && (
-              <CustomerInvoices invoices={invoices} />
-            )}
-            {currentTab === "logs" && <CustomerLogs logs={logs} />}
+              </Grid>
+            </div>
           </Stack>
         </Container>
       </Box>

@@ -5,6 +5,9 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 const IndexPage = lazy(() => import('src/pages/dashboard/index'));
 
 const NumbersPage = lazy(() => import('src/pages/dashboard/numbers'))
+const NumbersCreatePage = lazy(() => import('src/pages/dashboard/numbers/create'))
+const NumbersEditPage = lazy(() => import('src/pages/dashboard/numbers/edit'))
+const NumbersDetailPage = lazy(() => import('src/pages/dashboard/numbers/detail'))
 const ImportNumbersPage = lazy(() =>
   import('src/pages/dashboard/importNumbers')
 )
@@ -36,7 +39,24 @@ export const dashboardRoutes = [
       },
       {
         path: 'numbers',
-        element: <NumbersPage />
+        children: [
+          {
+            index: true,
+            element: <NumbersPage />,
+          },
+          {
+            path: "create",
+            element: <NumbersCreatePage />,
+          },
+          {
+            path: ":clientId",
+            element: <NumbersDetailPage />,
+          },
+          {
+            path: ":clientId/edit",
+            element: <NumbersEditPage />,
+          },
+        ],
       },
       {
         path: 'send-sms',
