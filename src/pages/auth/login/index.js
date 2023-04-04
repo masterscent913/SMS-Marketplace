@@ -52,7 +52,6 @@ const Page = () => {
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        await signIn(values.email, values.password);
         const response = await axios.post(
           'http://localhost:2480/login',
           {
@@ -69,18 +68,26 @@ const Page = () => {
         console.log("========Response========", response.status);
         if(response.status === 200)
         {
-
+          await signIn(values.email, values.password);          
+          if (isMounted()) {
+            // returnTo could be an absolute path
+            if(values.email === 'admin@gmail.com')
+            {
+              router.push(paths.admin.index);
+            }  
+            else
+            {
+              router.push(paths.dashboard.index);
+            }              
+          }
         }
         else
         {
           toast.error("Password Incorrect.");
         }
 
-        // if (isMounted()) {
-        //   // returnTo could be an absolute path
-        //   router.push(paths.dashboard.index);
-        // }
-        // console.log(isMounted());
+        
+         console.log(isMounted());
       } catch (err) {
         console.error("=========Error========", err);
 
