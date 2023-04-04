@@ -20,6 +20,9 @@ import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { useSearchParams } from "src/hooks/use-search-params";
 import { useRouter } from "src/hooks/use-router";
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialValues = {
   email: "",
@@ -50,13 +53,36 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await signIn(values.email, values.password);
-        if (isMounted()) {
-          // returnTo could be an absolute path
-          router.push(paths.dashboard.index);
+        const response = await axios.post(
+          'http://localhost:2480/login',
+          {
+            email:values.email,
+            pwd:values.password
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        console.log("========Response========", response.status);
+        if(response.status === 200)
+        {
+
         }
-        console.log(isMounted());
+        else
+        {
+          toast.error("Password Incorrect.");
+        }
+
+        // if (isMounted()) {
+        //   // returnTo could be an absolute path
+        //   router.push(paths.dashboard.index);
+        // }
+        // console.log(isMounted());
       } catch (err) {
-        console.error(err);
+        console.error("=========Error========", err);
 
         if (isMounted()) {
           helpers.setStatus({ success: false });
@@ -148,6 +174,7 @@ const Page = () => {
           </CardContent>
         </Card>
       </div>
+      <ToastContainer autoClose={3000} draggableDirection='x' />
     </>
   );
 };
