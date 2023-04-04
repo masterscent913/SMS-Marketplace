@@ -37,7 +37,7 @@ export const ClientCreateForm = (props) => {
       try {
         // NOTE: Make API request
         const response = await axios.post(
-          'http://localhost:2480/create',
+          'http://65.21.236.218:2480/create',
           {
             name:values.name,
             email:values.email,
