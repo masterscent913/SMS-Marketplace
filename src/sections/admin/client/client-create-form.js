@@ -1,6 +1,10 @@
 import toast from "react-hot-toast";
+import axios from 'axios';
+
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useRouter } from 'src/hooks/use-router';
+
 import {
   Button,
   Card,
@@ -15,6 +19,8 @@ import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
 
 export const ClientCreateForm = (props) => {
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -30,10 +36,33 @@ export const ClientCreateForm = (props) => {
     onSubmit: async (values, helpers) => {
       try {
         // NOTE: Make API request
-        await wait(500);
-        helpers.setStatus({ success: true });
-        helpers.setSubmitting(false);
-        toast.success("Client updated");
+        const response = await axios.post(
+          'http://localhost:2480/create',
+          {
+            name:values.name,
+            email:values.email,
+            pwd:values.password
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        if(response.status === 200)
+        {
+          helpers.setStatus({ success: true });
+          helpers.setSubmitting(false);
+          toast.success("Client created!");
+        }
+        else
+        {
+          toast.error("Something went wrong!");
+          helpers.setStatus({ success: false });
+          helpers.setSubmitting(false);  
+        }
+        router.push(paths.admin.clients.index);
       } catch (err) {
         console.error(err);
         toast.error("Something went wrong!");
@@ -112,7 +141,7 @@ export const ClientCreateForm = (props) => {
             color="inherit"
             component={RouterLink}
             disabled={formik.isSubmitting}
-            href={paths.admin.clients.details}
+            href={paths.admin.clients.index}
           >
             Cancel
           </Button>
