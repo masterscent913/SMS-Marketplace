@@ -142,7 +142,7 @@ export const ClientListTable = (props) => {
                         <Link
                           color="inherit"
                           component={RouterLink}
-                          href={paths.admin.clients.details.replace(
+                          href={paths.admin.smsSummary.details.replace(
                             ":clientId",
                             client.id
                           )}

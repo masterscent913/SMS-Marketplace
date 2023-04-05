@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
 
 import {
@@ -15,17 +15,72 @@ import {
   SvgIcon,
   Stack,
   Input,
+  IconButton,
 } from "@mui/material";
+import { RemoveCircle } from "@mui/icons-material";
 
 export const ImportNumberForm = () => {
-  const handleSubmit = useCallback((event) => {
-    event.preventDefault();
-  }, []);
+  // const [file, setFile] = useState(null);
+  // const handleSubmit = useCallback((event) => {
+  //   event.preventDefault();
+  //   const formData = new FormData();
+  //   // formData.append("avatar", files[0]);
+  // }, []);
+
+  // const fileInputRef = useRef(null);
+  // const handleImport = useCallback(async () => {
+  //   console.log("conasfas");
+  //   await fileInputRef.current?.click();
+  // }, []);
+
+  // // useEffect(() => {
+  // //   setFile(fileInputRef.current.files[0]);
+  // // }, [fileInputRef.current]);
+
+  // const handleFileInputChange = (e) => {
+  //   console.log("conasfas");
+  //   // setFile(fileInputRef.current.files[0]);
+  //   setFile(e.target.files[0]);
+  // };
+
+  // const handleRemoveSelectedFile = () => {
+  //   setFile(null);
+  //   fileInputRef.current.files = null;
+  // };
 
   const fileInputRef = useRef(null);
-  const handleImport = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
+  const [fileName, setFileName] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const file = fileInputRef.current.files[0];
+    if (file && file.type === "text/csv") {
+      // TODO: Upload the file
+      console.log("Uploading file:", file.name);
+      setFileName(file.name);
+    } else {
+      console.log("Invalid file type");
+    }
+  };
+
+  const handleFileChange = (e) => {
+    console.log("import click");
+    const file = e.target.files[0];
+    // if (file && file.type === "text/csv") {
+    setFileName(file.name);
+    // } else {
+    // setFileName("");
+    // }
+  };
+
+  const handleRemoveClick = () => {
+    setFileName("");
+    fileInputRef.current.value = null;
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current.click();
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -48,21 +103,37 @@ export const ImportNumberForm = () => {
               >
                 Import Numbers
               </FormLabel>
-              <Button
-                color="inherit"
-                size="small"
-                onClick={handleImport}
-                startIcon={
-                  <SvgIcon>
-                    <Upload01Icon />
-                  </SvgIcon>
-                }
-              >
-                Import
-              </Button>
-              <input hidden ref={fileInputRef} type="file" />
-            </Stack>
 
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
+              {fileName ? (
+                <Stack align="content-center" direction="row">
+                  <p>{fileName}</p>
+                  <IconButton onClick={handleRemoveClick}>
+                    <SvgIcon color="error" size="small">
+                      <RemoveCircle />
+                    </SvgIcon>
+                  </IconButton>
+                </Stack>
+              ) : (
+                <Button
+                  color="inherit"
+                  size="small"
+                  onClick={handleImportClick}
+                  startIcon={
+                    <SvgIcon>
+                      <Upload01Icon />
+                    </SvgIcon>
+                  }
+                >
+                  Import
+                </Button>
+              )}
+            </Stack>
             <OutlinedInput
               fullWidth
               name="numbers"
