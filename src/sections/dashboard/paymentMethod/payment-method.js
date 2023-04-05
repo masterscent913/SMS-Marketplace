@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import axios from 'axios';
+import toast from "react-hot-toast";
 import {
   Box,
   Checkbox,
@@ -25,6 +27,30 @@ const paymentMethods = [
 
 export const CheckoutBilling = (props) => {
   const { billing, onChange, ...other } = props;
+
+  const handleSubmit = async (values, helpers) => {
+    // . . .
+    console.error("billing = ", billing);
+
+    const response = await axios.post(
+      'http://localhost:2480/setpayment',
+      billing,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+
+    if(response.status === 200)
+    {
+      toast.success("Payment Method saved!");
+    }
+    else
+    {
+      toast.error("Something went wrong!");
+    }
+   };
 
   return (
     <Stack {...other} spacing={6}>
@@ -198,7 +224,7 @@ export const CheckoutBilling = (props) => {
             mt: 3,
           }}
         >
-          <Button fullWidth size="large" variant="contained">
+          <Button fullWidth size="large" variant="contained" onClick={handleSubmit}>
             Submit
           </Button>
         </Box>

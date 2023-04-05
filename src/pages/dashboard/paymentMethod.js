@@ -13,6 +13,10 @@ import { usePageView } from "src/hooks/use-page-view";
 import { useSettings } from "src/hooks/use-settings";
 import { CheckoutBilling } from "src/sections/dashboard/paymentMethod/payment-method";
 import { useCallback, useState } from "react";
+import axios from 'axios';
+import toast from "react-hot-toast";
+
+
 
 const initialBilling = {
   address: "",
@@ -30,15 +34,39 @@ const initialBilling = {
 
 const Page = () => {
   const settings = useSettings();
-  const [billing, setBilling] = useState(initialBilling);
+  
 
   usePageView();
+
+   // . . .
+  const response = axios.post(
+    'http://localhost:2480/paymentquery',
+    {
+      userid:window.name,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  ).then(function(response){
+    console.log("data", response.data);
+    //setBilling(response.data);
+    //setBilling((prevState) => (response.data));
+    let initialBilling = response.data;
+  }
+  ).catch(function(error){
+    console.log(error);
+  });
+
+  const [billing, setBilling] = useState(initialBilling);
 
   const handleBillingChange = useCallback((event) => {
     setBilling((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
+
   }, []);
   return (
     <>
