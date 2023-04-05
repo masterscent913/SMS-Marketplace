@@ -34,13 +34,11 @@ const initialBilling = {
 
 const Page = () => {
   const settings = useSettings();
-  
+  const [billing, setBilling] = useState(initialBilling);
 
   usePageView();
-
-   // . . .
   const response = axios.post(
-    'http://localhost:2480/paymentquery',
+    'http://65.21.236.218:2480/paymentquery',
     {
       userid:window.name,
     },
@@ -50,23 +48,20 @@ const Page = () => {
       }
     }
   ).then(function(response){
-    console.log("data", response.data);
-    //setBilling(response.data);
-    //setBilling((prevState) => (response.data));
-    let initialBilling = response.data;
+    console.log("Start Billing====>");
+    setBilling(response.data[0]);
+    console.log("Billing", billing);
   }
   ).catch(function(error){
     console.log(error);
   });
 
-  const [billing, setBilling] = useState(initialBilling);
-
   const handleBillingChange = useCallback((event) => {
+    console.log("billing change", event.target.value);
     setBilling((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
-
   }, []);
   return (
     <>

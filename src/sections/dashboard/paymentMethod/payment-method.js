@@ -33,7 +33,7 @@ export const CheckoutBilling = (props) => {
     console.error("billing = ", billing);
 
     const response = await axios.post(
-      'http://localhost:2480/setpayment',
+      'http://65.21.236.218:2480/setpayment',
       billing,
       {
         headers: {
