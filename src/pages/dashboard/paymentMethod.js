@@ -12,7 +12,7 @@ import { Seo } from "src/components/seo";
 import { usePageView } from "src/hooks/use-page-view";
 import { useSettings } from "src/hooks/use-settings";
 import { CheckoutBilling } from "src/sections/dashboard/paymentMethod/payment-method";
-import { useCallback, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import axios from 'axios';
 import toast from "react-hot-toast";
 
@@ -32,29 +32,67 @@ const initialBilling = {
   zip: "",
 };
 
+const initialBilling1 = {
+  address: "1",
+  cardExpirationDate: "",
+  cardNumber: "",
+  cardOwner: "",
+  cardSecurityCode: "",
+  firstName: "",
+  lastName: "",
+  optionalAddress: "",
+  paymentMethod: "visa",
+  state: "",
+  zip: "",
+};
+
 const Page = () => {
   const settings = useSettings();
   const [billing, setBilling] = useState(initialBilling);
 
   usePageView();
-  const response = axios.post(
-    'http://65.21.236.218:2480/paymentquery',
-    {
-      userid:window.name,
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json'
+
+  useEffect(() => {
+    console.log("start");
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          'http://65.21.236.218:2480/paymentquery',
+          {
+            userid:window.name,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        console.log("Start Billing====>", response.data[0]);
+        if(response.data[0] !== undefined )
+        {
+          setBilling((prevState) => ({
+            ...prevState,
+            address : response.data[0].street,
+            cardExpirationDate : response.data[0].cardExpirationDate,
+            cardNumber: response.data[0].cardnumber,
+            cardOwner: response.data[0].cardname,
+            cardSecurityCode: response.data[0].securitycode,
+            firstName: response.data[0].firstname,
+            lastName: response.data[0].lastname,
+            optionalAddress: response.data[0].street2,
+            paymentMethod: response.data[0].cardtype,
+            state: response.data[0].state,
+            zip: response.data[0].zip,
+          }));
+        }
+        
+      } catch (error) {
+        console.log(error);
       }
-    }
-  ).then(function(response){
-    console.log("Start Billing====>");
-    setBilling(response.data[0]);
-    console.log("Billing", billing);
-  }
-  ).catch(function(error){
-    console.log(error);
-  });
+    };
+    fetchData();
+  }, []);
 
   const handleBillingChange = useCallback((event) => {
     console.log("billing change", event.target.value);

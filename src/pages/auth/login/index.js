@@ -53,7 +53,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         const response = await axios.post(
-          'http://localhost:2480/login',
+          'http://65.21.236.218:2480/login',
           {
             email:values.email,
             pwd:values.password
