@@ -53,7 +53,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         const response = await axios.post(
-          'http://localhost:2480/login',
+          'http://65.21.236.218:2480/login',
           {
             email:values.email,
             pwd:values.password
@@ -65,15 +65,10 @@ const Page = () => {
           }
         )
 
-        console.log("========Response status========", response.status);
-        console.log("========Response data========", response.data);
         if(response.status === 200)
         {
           window.name = response.data['userid'];
-
-          console.log("========global userid========", window.name);
-
-          await signIn(values.email, values.password);          
+          await signIn(values.email, values.password);
           if (isMounted()) {
             // returnTo could be an absolute path
             if(values.email === 'admin@gmail.com')
@@ -90,12 +85,8 @@ const Page = () => {
         {
           toast.error("Password Incorrect.");
         }
-
-        
-         console.log(isMounted());
       } catch (err) {
         console.error("=========Error========", err);
-
         if (isMounted()) {
           helpers.setStatus({ success: false });
           helpers.setErrors({ submit: err.message });
@@ -111,22 +102,6 @@ const Page = () => {
       <div>
         <Card elevation={16}>
           <CardHeader
-            // subheader={(
-            //   <Typography
-            //     color="text.secondary"
-            //     variant="body2"
-            //   >
-            //     Don&apos;t have an account?
-            //     &nbsp;
-            //     <Link
-            //       href={paths.auth.register}
-            //       underline="hover"
-            //       variant="subtitle2"
-            //     >
-            //       Register
-            //     </Link>
-            //   </Typography>
-            // )}
             titleTypographyProps={{ variant: "h3" }}
             sx={{ pb: 0 }}
             title="Log in"
