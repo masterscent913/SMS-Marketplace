@@ -158,6 +158,7 @@ const Page = () => {
                   <Button
                     color="inherit"
                     size="small"
+                    href="/dashboard/import-numbers"
                     startIcon={
                       <SvgIcon>
                         <Upload01Icon />
@@ -181,7 +182,7 @@ const Page = () => {
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
-                  href={paths.dashboard.numbers.create}
+				href="/dashboard/import-numbers"
                   startIcon={
                     <SvgIcon>
                       <PlusIcon />
