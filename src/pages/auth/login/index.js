@@ -65,9 +65,10 @@ const Page = () => {
         console.error('=========Error========', err)
         if (isMounted()) {
           helpers.setStatus({ success: false })
-          helpers.setErrors({ submit: err.message })
+          helpers.setErrors({ submit: err})
           helpers.setSubmitting(false)
         }
+        toast.error('Login failed');
       }
     }
   })

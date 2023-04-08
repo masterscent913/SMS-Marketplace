@@ -55,7 +55,9 @@ const useClient = (clientId) => {
 
 const Page = () => {
   const location = useLocation();
-  const clientId = location.pathname.lastIndexOf('/');
+  console.log('location.pathname >>>', location.pathname);
+  const clientId = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+  console.log('clientId >>>', clientId);
 
   const client = useClient(clientId);
   usePageView();

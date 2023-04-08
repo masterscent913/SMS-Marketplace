@@ -60,6 +60,8 @@ class AuthApi {
           resolve({
             accessToken: token
           })
+        } else {
+          reject(new Error('Login failed'))
         }
         // Merge static users (data file) with persisted users (browser storage)
 
