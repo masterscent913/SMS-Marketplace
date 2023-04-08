@@ -15,6 +15,7 @@ import { CheckoutBilling } from "src/sections/dashboard/paymentMethod/payment-me
 import { useEffect, useCallback, useState } from "react";
 import axios from 'axios';
 import toast from "react-hot-toast";
+import { SERVER_URL } from "src/constants";
 
 
 
@@ -57,7 +58,7 @@ const Page = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          'http://65.21.236.218:2480/paymentquery',
+          `${SERVER_URL}/paymentquery`,
           {
             userid:window.name,
           },

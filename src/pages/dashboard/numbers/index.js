@@ -89,7 +89,7 @@ const useNumbersStore = (searchState) => {
   const handleNumbersGet = useCallback(async () => {
     try {
       const dbresp = await axios.post(
-        'http://65.21.236.218:2480/numberquery',
+        `${SERVER_URL}/numberquery`,
         {
           userid:window.name,
         },

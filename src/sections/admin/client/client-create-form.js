@@ -17,6 +17,7 @@ import {
 import { RouterLink } from "src/components/router-link";
 import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
+import { SERVER_URL } from "src/constants";
 
 export const ClientCreateForm = (props) => {
   const router = useRouter();
@@ -25,6 +26,7 @@ export const ClientCreateForm = (props) => {
     initialValues: {
       name: "",
       email: "",
+      password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -32,16 +34,18 @@ export const ClientCreateForm = (props) => {
         .max(255)
         .required("Email is required"),
       name: Yup.string().max(255).required("Name is required"),
+      password: Yup.string().max(32).required("Password is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
         // NOTE: Make API request
         const response = await axios.post(
-          'http://65.21.236.218:2480/create',
+          `${SERVER_URL}/create`,
           {
             name:values.name,
             email:values.email,
-            pwd:values.password
+            pwd:values.password,
+            role:'client'
           },
           {
             headers: {

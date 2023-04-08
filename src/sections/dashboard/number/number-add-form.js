@@ -19,6 +19,7 @@ import {
 import { RouterLink } from "src/components/router-link";
 import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
+import { SERVER_URL } from "src/constants";
 
 export const NumberAddForm = (props) => {
   const router = useRouter();
@@ -40,7 +41,7 @@ export const NumberAddForm = (props) => {
       try {
         // NOTE: Make API request
         const response = await axios.post(
-          'http://65.21.236.218:2480/create',
+          `${SERVER_URL}/create`,
           {
             name:values.name,
             email:values.email,

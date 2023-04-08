@@ -83,9 +83,9 @@ const useClientsStore = (searchState) => {
     clientsCount: 0,
   });
 
-  const handleClientsGet = useCallback(async () => {
+  const handleClientsGet = useCallback(async (force = true) => {
     try {
-      const response = await clientsApi.getClients(searchState);
+      const response = await clientsApi.getClients(force, searchState);
       if (isMounted()) {
         setState({
           clients: response.data,
@@ -101,12 +101,16 @@ const useClientsStore = (searchState) => {
     () => {
       handleClientsGet();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [searchState]
   );
 
+  const onDeleteClient = () => {
+    handleClientsGet(false);
+  }
+
   return {
     ...state,
+    onDeleteClient,
   };
 };
 
@@ -121,6 +125,8 @@ const Page = () => {
   const clientsStore = useClientsStore(clientsSearch.state);
   const clientsIds = useClientsIds(clientsStore.clients);
   const clientsSelection = useSelection(clientsIds);
+
+  console.log('clientsStore >>>', clientsStore);
 
   usePageView();
 
@@ -173,6 +179,7 @@ const Page = () => {
                 page={clientsSearch.state.page}
                 rowsPerPage={clientsSearch.state.rowsPerPage}
                 selected={clientsSelection.selected}
+                onDelete={clientsStore.onDeleteClient}
               />
             </Card>
           </Stack>

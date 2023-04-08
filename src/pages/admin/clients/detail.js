@@ -26,14 +26,15 @@ import { paths } from "src/paths";
 import { ClientBasicDetails } from "src/sections/admin/client/client-basic-details";
 import { getInitials } from "src/utils/get-initials";
 import { ClientDataManagement } from "src/sections/admin/client/client-data-management";
+import { useLocation } from "react-router";
 
-const useClient = () => {
+const useClient = (clientId) => {
   const isMounted = useMounted();
   const [client, setClient] = useState(null);
 
-  const handleClientGet = useCallback(async () => {
+  const handleClientGet = useCallback(async (clientId) => {
     try {
-      const response = await clientsApi.getClient();
+      const response = await clientsApi.getClient(clientId);
       if (isMounted()) {
         setClient(response);
       }
@@ -44,9 +45,8 @@ const useClient = () => {
 
   useEffect(
     () => {
-      handleClientGet();
+      handleClientGet(clientId);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -54,10 +54,20 @@ const useClient = () => {
 };
 
 const Page = () => {
-  const client = useClient();
+  const location = useLocation();
+  const clientId = location.pathname.lastIndexOf('/');
+
+  const client = useClient(clientId);
   usePageView();
   if (!client) {
     return null;
+  }
+
+  const onDeleteClick = async () => {
+    console.log('Delete Client >>>', clientId);
+    if (await clientsApi.deleteClients([clientId])) {
+      window.location.href = paths.admin.clients.index;
+    }
   }
 
   return (
@@ -111,14 +121,14 @@ const Page = () => {
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">{client.email}</Typography>
-                    <Stack alignItems="center" direction="row" spacing={1}>
+                    {/* <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="subtitle2">user_id:</Typography>
                       <Chip label={client.id} size="small" />
-                    </Stack>
+                    </Stack> */}
                   </Stack>
                 </Stack>
                 <Stack alignItems="center" direction="row" spacing={2}>
-                  <Button
+                  {/* <Button
                     color="inherit"
                     component={RouterLink}
                     endIcon={
@@ -129,8 +139,8 @@ const Page = () => {
                     href={paths.admin.clients.edit}
                   >
                     Edit
-                  </Button>
-                  <Button
+                  </Button> */}
+                  {/* <Button
                     endIcon={
                       <SvgIcon>
                         <ChevronDownIcon />
@@ -139,7 +149,7 @@ const Page = () => {
                     variant="contained"
                   >
                     Actions
-                  </Button>
+                  </Button> */}
                 </Stack>
               </Stack>
             </Stack>
@@ -147,7 +157,7 @@ const Page = () => {
               <Grid container spacing={4}>
                 <Grid xs={12} lg={4}>
                   <ClientBasicDetails {...client} />
-                  <ClientDataManagement />
+                  <ClientDataManagement onDeleteClick={onDeleteClick}/>
                 </Grid>
               </Grid>
             </div>

@@ -1,5 +1,7 @@
 import { wait } from 'src/utils/wait'
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
+import { SERVER_URL } from 'src/constants';
 
 const STORAGE_KEY = 'users'
 
@@ -36,8 +38,29 @@ class AuthApi {
 
     await wait(500)
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
+        const response = await axios.post(
+          `${SERVER_URL}/login`,
+          {
+            email: request.email,
+            pwd: request.password
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+        console.log('login response >>> ', response.data);
+
+        if(response.status === 200)
+        {
+          const token = response.data.token;
+          resolve({
+            accessToken: token
+          })
+        }
         // Merge static users (data file) with persisted users (browser storage)
 
         // Find the user
@@ -51,10 +74,10 @@ class AuthApi {
         // // Create the access token
         // const accessToken = sign({ userId: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
-        resolve({
+        /*resolve({
           accessToken:
             'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJFbWFpbCI6InRlc3RAZ21haWwuY29tIiwiSXNzdWVyIjoiSXNzdWVyIiwiZXhwIjoxNjc5NzUxNjY1LCJpYXQiOjE2Nzg4ODc2NjV9.QHvX6LWsCVeQYJKqEb2044aEbQZnva0GyTy_EKrrFTM'
-        })
+        })*/
       } catch (err) {
         console.error('[Auth Api]: ', err)
         reject(new Error('Internal server error'))
@@ -102,17 +125,12 @@ class AuthApi {
         const decodedToken = jwt_decode(accessToken)
         console.log(' >>> decodeToken >>> ', decodedToken);
         // // Find the user
-        const { Email, Role } = decodedToken;
-        
-        // const user = mergedUsers.find((user) => user.id === userId);
-
-        // if (!user) {
-
-        // }
-
+        const { email, role, name, id } = decodedToken;
         resolve({
-          email: Email,
-          role: Role
+          email: email,
+          role: role,
+          name: name, 
+          id: id
         });
       } catch (err) {
         console.error('[Auth Api]: ', err)

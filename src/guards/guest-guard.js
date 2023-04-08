@@ -6,7 +6,7 @@ import { paths } from 'src/paths';
 
 export const GuestGuard = (props) => {
   const { children } = props;
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const auth = useAuth();
   const router = useRouter();
   const [checked, setChecked] = useState(false);
@@ -23,13 +23,15 @@ export const GuestGuard = (props) => {
   useEffect(() => {
       // check();
       if (isAuthenticated) {
-        router.replace(paths.dashboard.index);
+        if (user.role == 'admin')
+          router.replace(paths.admin.index);
+        else 
+          router.replace(paths.dashboard.index);
       } else {
         router.replace(paths.auth.index);
         setChecked(true);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isAuthenticated]);
 
   if (!checked) {

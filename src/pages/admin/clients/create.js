@@ -19,42 +19,9 @@ import { paths } from "src/paths";
 import { ClientEditForm } from "src/sections/admin/client/client-edit-form";
 import { getInitials } from "src/utils/get-initials";
 import { ClientCreateForm } from "src/sections/admin/client/client-create-form";
-
-const useClient = () => {
-  const isMounted = useMounted();
-  const [client, setClient] = useState(null);
-
-  const handleClientGet = useCallback(async () => {
-    try {
-      const response = await clientsApi.getClient();
-
-      if (isMounted()) {
-        setClient(response);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(
-    () => {
-      handleClientGet();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
-  return client;
-};
-
 const Page = () => {
-  const client = useClient();
 
   usePageView();
-
-  if (!client) {
-    return null;
-  }
 
   return (
     <>

@@ -18,6 +18,7 @@ import { usePageView } from "src/hooks/use-page-view";
 import { paths } from "src/paths";
 import { ClientEditForm } from "src/sections/admin/client/client-edit-form";
 import { getInitials } from "src/utils/get-initials";
+import { useLocation } from "react-router";
 
 const useClient = () => {
   const isMounted = useMounted();
@@ -39,7 +40,6 @@ const useClient = () => {
     () => {
       handleClientGet();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -48,7 +48,8 @@ const useClient = () => {
 
 const Page = () => {
   const client = useClient();
-
+  const location = useLocation();
+  console.log('location', location);
   usePageView();
 
   if (!client) {

@@ -8,8 +8,7 @@ import { useAuth } from "src/hooks/use-auth";
 export const AdminGuard = (props) => {
   const { children } = props;
   const { user } = useAuth();
-  console.log(user, " is user");
-  if (!user || user.role !== "Admin") {
+  if (!user || user.role !== "admin") {
     return <Error statusCode={400} title={`Not Authorized`} />;
   }
 

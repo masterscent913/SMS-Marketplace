@@ -11,7 +11,7 @@ export const ClientDataManagement = (props) => (
   <Card {...props}>
     <CardHeader title="Data Management" />
     <CardContent sx={{ pt: 0 }}>
-      <Button color="error" variant="outlined">
+      <Button color="error" variant="outlined" onClick={props.onDeleteClick}>
         Delete Account
       </Button>
       <Box sx={{ mt: 1 }}>

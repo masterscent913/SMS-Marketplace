@@ -24,6 +24,8 @@ import { Scrollbar } from "src/components/scrollbar";
 import { paths } from "src/paths";
 import { SeverityPill } from "src/components/severity-pill";
 import { getInitials } from "src/utils/get-initials";
+import { clientsApi } from "src/api/clients";
+import toast from "react-hot-toast";
 
 export const ClientListTable = (props) => {
   const {
@@ -38,11 +40,22 @@ export const ClientListTable = (props) => {
     page = 0,
     rowsPerPage = 0,
     selected = [],
+    onDelete,
   } = props;
 
   const selectedSome = selected.length > 0 && selected.length < items.length;
   const selectedAll = items.length > 0 && selected.length === items.length;
   const enableBulkActions = selected.length > 0;
+
+  const handleDelete = async () => {
+    console.log('selected >>>', selected);
+    if (await clientsApi.deleteClients(selected)) {
+      toast.success('Client deleted');
+      onDelete.apply();
+    } else {
+      toast.error('Client delete failed');
+    }
+  };
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -75,12 +88,12 @@ export const ClientListTable = (props) => {
               }
             }}
           />
-          <Button color="inherit" size="small">
+          <Button color="inherit" size="small" onClick={handleDelete}>
             Delete
           </Button>
-          <Button color="inherit" size="small">
+          {/* <Button color="inherit" size="small">
             Edit
-          </Button>
+          </Button> */}
         </Stack>
       )}
       <Scrollbar>
@@ -103,7 +116,7 @@ export const ClientListTable = (props) => {
               <TableCell>Name</TableCell>
               <TableCell>Number Count</TableCell>
               <TableCell>SMS Count</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              {/* <TableCell align="right">Actions</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -167,7 +180,7 @@ export const ClientListTable = (props) => {
                     </SeverityPill>
                   </TableCell>
 
-                  <TableCell align="right">
+                  {/* <TableCell align="right">
                     <IconButton
                       component={RouterLink}
                       href={paths.admin.clients.edit.replace(
@@ -190,7 +203,7 @@ export const ClientListTable = (props) => {
                         <ArrowRightIcon />
                       </SvgIcon>
                     </IconButton>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               );
             })}
@@ -222,4 +235,5 @@ ClientListTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
+  onDelete: PropTypes.func,
 };

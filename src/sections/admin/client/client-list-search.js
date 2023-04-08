@@ -149,7 +149,7 @@ export const ClientListSearch = (props) => {
             }
           />
         </Box>
-        <TextField
+        {/* <TextField
           label="Sort By"
           name="sort"
           onChange={handleSortChange}
@@ -162,7 +162,7 @@ export const ClientListSearch = (props) => {
               {option.label}
             </option>
           ))}
-        </TextField>
+        </TextField> */}
       </Stack>
     </>
   );
