@@ -46,7 +46,7 @@ const useClient = () => {
     () => {
       handleClientGet();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     []
   );
 

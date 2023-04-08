@@ -24,7 +24,7 @@ export const TaskCheckItem = (props) => {
   useEffect(() => {
       handleNameReset();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [checkItem]);
 
   const handleCheckChange = useCallback((event) => {

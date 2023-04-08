@@ -87,7 +87,7 @@ const useChartSeries = () => {
   }, []);
 
   useEffect(() => subscribe(handleTick),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [subscribe]);
 
   return [

@@ -18,7 +18,7 @@ const useEmail = (emailId) => {
         emailId
       }));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [emailId]);
 
   return email;

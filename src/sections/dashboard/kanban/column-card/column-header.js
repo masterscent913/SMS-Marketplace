@@ -16,7 +16,7 @@ export const ColumnHeader = (props) => {
   useEffect(() => {
       handleNameReset();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [name]);
 
   const handleNameBlur = useCallback(() => {

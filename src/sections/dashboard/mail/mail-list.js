@@ -31,7 +31,7 @@ const useEmails = (currentLabelId) => {
     () => {
       dispatch(thunks.getEmails({ label: currentLabelId }));
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [currentLabelId]
   );
 

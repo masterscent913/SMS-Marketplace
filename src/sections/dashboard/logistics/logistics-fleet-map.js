@@ -62,7 +62,7 @@ export const LogisticsFleetMap = (props) => {
   useEffect(() => {
       handleRecenter();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [vehicles, currentVehicleId]);
 
   const mapStyle = theme.palette.mode === 'dark'

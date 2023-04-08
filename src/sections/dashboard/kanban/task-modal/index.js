@@ -115,7 +115,7 @@ export const TaskModal = (props) => {
   useEffect(() => {
       handleTabsReset();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [taskId]);
 
   const handleNameReset = useCallback(() => {
@@ -126,7 +126,7 @@ export const TaskModal = (props) => {
   useEffect(() => {
       handleNameReset();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [task]);
 
   const handleTabsChange = useCallback((event, value) => {

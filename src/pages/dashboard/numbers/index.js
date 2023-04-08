@@ -116,7 +116,7 @@ const useNumbersStore = (searchState) => {
     () => {
       handleNumbersGet();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [searchState]
   );
 

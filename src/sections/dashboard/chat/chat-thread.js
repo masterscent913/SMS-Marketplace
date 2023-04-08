@@ -30,7 +30,7 @@ const useParticipants = (threadKey) => {
   useEffect(() => {
       handleParticipantsGet();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [threadKey]);
 
   return participants;
@@ -81,7 +81,7 @@ const useThread = (threadKey) => {
   useEffect(() => {
       handleThreadGet();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [threadKey]);
 
   return thread;
@@ -112,7 +112,7 @@ const useMessagesScroll = (thread) => {
   useEffect(() => {
       handleUpdate();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [thread]);
 
   return {

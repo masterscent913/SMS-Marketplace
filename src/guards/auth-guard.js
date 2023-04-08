@@ -33,7 +33,7 @@ export const AuthGuard = (props) => {
     () => {
       check();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
     [check]
   );
 
