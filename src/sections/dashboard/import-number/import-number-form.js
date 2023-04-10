@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import { numbersApi } from "src/api/numbers";
+import { useAuth } from "src/hooks/use-auth";
+import toast from "react-hot-toast";
 
 import {
   Box,
@@ -20,12 +23,23 @@ import {
 import { RemoveCircle } from "@mui/icons-material";
 
 export const ImportNumberForm = () => {
-  // const [file, setFile] = useState(null);
-  // const handleSubmit = useCallback((event) => {
-  //   event.preventDefault();
-  //   const formData = new FormData();
-  //   // formData.append("avatar", files[0]);
-  // }, []);
+  const [file, setFile] = useState(null);
+  const { user } = useAuth();
+  const [numbers, setNumbers] = useState("");
+
+  const handleSubmit = useCallback(async (event) => {
+    event.preventDefault();
+    let numArray = numbers.split(",");
+    console.log('numArray >>>', numArray);
+    if (user) {
+      try {
+        await numbersApi.submitNumber({id: user.id, numbers: numArray});
+        toast.success('Import number done');
+      } catch (error) {
+        toast.error('Import number failed');
+      }
+    }
+  }, [numbers]);
 
   // const fileInputRef = useRef(null);
   // const handleImport = useCallback(async () => {
@@ -51,26 +65,36 @@ export const ImportNumberForm = () => {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const file = fileInputRef.current.files[0];
-    if (file && file.type === "text/csv") {
-      // TODO: Upload the file
-      console.log("Uploading file:", file.name);
-      setFileName(file.name);
-    } else {
-      console.log("Invalid file type");
-    }
-  };
+  const handleChangeNumber = (e) => {
+    setNumbers(e.target.value);
+  }
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const file = fileInputRef.current.files[0];
+  //   if (file && file.type === "text/csv") {
+  //     // TODO: Upload the file
+  //     console.log("Uploading file:", file.name);
+  //     setFileName(file.name);
+  //   } else {
+  //     console.log("Invalid file type");
+  //   }
+  // };
 
   const handleFileChange = (e) => {
     console.log("import click");
     const file = e.target.files[0];
-    // if (file && file.type === "text/csv") {
-    setFileName(file.name);
-    // } else {
-    // setFileName("");
-    // }
+    if (file && file.type === "text/csv") {
+      setFileName(file.name);
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        const content = e.target.result;
+        await formik.setFieldValue("numbers", content);
+      }
+      reader.readAsText(file);
+    } else {
+      setFileName("");
+    }
   };
 
   const handleRemoveClick = () => {
@@ -139,6 +163,8 @@ export const ImportNumberForm = () => {
               name="numbers"
               placeholder="Enter comma separated numbers"
               required
+              value={numbers}
+              onChange={handleChangeNumber}
               multiline
               rows={6}
             />
@@ -152,7 +178,7 @@ export const ImportNumberForm = () => {
           mt: 3,
         }}
       >
-        <Button fullWidth size="large" variant="contained">
+        <Button fullWidth size="large" type="submit" variant="contained">
           Submit
         </Button>
       </Box>

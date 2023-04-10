@@ -79,8 +79,6 @@ export const NumberListSearch = (props) => {
         unsubscribed: undefined,
         landline: undefined,
         mobile: undefined,
-        isProspect: undefined,
-        isReturning: undefined,
       };
 
       if (value !== "all") {
@@ -93,7 +91,6 @@ export const NumberListSearch = (props) => {
 
   const handleQueryChange = useCallback((event) => {
     event.preventDefault();
-    console.log(filters, " filetr");
     setFilters((prevState) => ({
       ...prevState,
       query: queryRef.current?.value,
@@ -150,7 +147,7 @@ export const NumberListSearch = (props) => {
             }
           />
         </Box>
-        <TextField
+        {/* <TextField
           label="Sort By"
           name="sort"
           onChange={handleSortChange}
@@ -163,7 +160,7 @@ export const NumberListSearch = (props) => {
               {option.label}
             </option>
           ))}
-        </TextField>
+        </TextField> */}
       </Stack>
     </>
   );

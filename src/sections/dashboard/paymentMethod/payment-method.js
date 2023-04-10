@@ -13,7 +13,6 @@ import {
   Unstable_Grid2 as Grid,
   Button,
 } from "@mui/material";
-import { SERVER_URL } from "src/constants";
 
 const paymentMethods = [
   {
@@ -34,7 +33,7 @@ export const CheckoutBilling = (props) => {
     console.error("billing = ", billing);
 
     const response = await axios.post(
-      `${SERVER_URL}/setpayment`,
+      'http://65.21.236.218:2480/setpayment',
       {
         ...billing,
         userid:window.name,        

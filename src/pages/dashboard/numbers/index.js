@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import FilterFunnel01 from "@untitled-ui/icons-react/build/esm/FilterFunnel01";
+
 import {
   Box,
   Button,
@@ -19,8 +21,10 @@ import { useSelection } from "src/hooks/use-selection";
 import { NumberListSearch } from "src/sections/dashboard/number/number-list-search";
 import { NumberListTable } from "src/sections/dashboard/number/number-list-table";
 import { paths } from "src/paths";
+import CreditCardPayment from "../creditCardPayment";
 
 import axios from 'axios';
+import { useAuth } from "src/hooks/use-auth";
 
 
 const useNumbersSearch = () => {
@@ -30,10 +34,7 @@ const useNumbersSearch = () => {
       subscribed: undefined,
       unsubscribed: undefined,
       landline: undefined,
-      mobile: undefined,
-      hasAcceptedMarketing: undefined,
-      isProspect: undefined,
-      isReturning: undefined,
+      mobile: undefined
     },
     page: 0,
     rowsPerPage: 5,
@@ -49,11 +50,11 @@ const useNumbersSearch = () => {
   }, []);
 
   const handleSortChange = useCallback((sort) => {
-    setState((prevState) => ({
-      ...prevState,
-      sortBy: sort.sortBy,
-      sortDir: sort.sortDir,
-    }));
+    // setState((prevState) => ({
+    //   ...prevState,
+    //   sortBy: sort.sortBy,
+    //   sortDir: sort.sortDir,
+    // }));
   }, []);
 
   const handlePageChange = useCallback((event, page) => {
@@ -84,27 +85,18 @@ const useNumbersStore = (searchState) => {
   const [state, setState] = useState({
     numbers: [],
     numbersCount: 0,
+    unfiltered: 0,
   });
+  const { user } = useAuth();
 
-  const handleNumbersGet = useCallback(async () => {
+  const handleNumbersGet = useCallback(async (force = true) => {
     try {
-      const dbresp = await axios.post(
-        `${SERVER_URL}/numberquery`,
-        {
-          userid:window.name,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-
-      const response = await numbersApi.getNumbers(searchState, dbresp.data);
+      const response = await numbersApi.getNumbers(force, user.id, searchState);
       if (isMounted()) {
         setState({
           numbers: response.data,
           numbersCount: response.count,
+          unfiltered: response.unfiltered,
         });
       }
     } catch (err) {
@@ -137,6 +129,27 @@ const Page = () => {
   const numbersIds = useNumbersIds(numbersStore.numbers);
   const numbersSelection = useSelection(numbersIds);
 
+  const handleFilter = async () => {
+    setOpenCardPayment(true);
+    // try {
+    //   const response = await numbersApi.filterNumbers();
+    //   if (response.success) {
+    //     numbersStore.handleNumbersGet(true);
+    //   }
+    // } catch (err) {
+
+    // }
+  };
+
+  const [openCardPayment, setOpenCardPayment] = useState(false);
+
+  const handlePaymentClose = () => {
+    setOpenCardPayment(false);
+  }
+
+  const handleProcessResult = (result) => {
+    setOpenCardPayment(false);
+  }
   usePageView();
 
   return (
@@ -155,7 +168,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Numbers</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
-                  <Button
+                  {/* <Button
                     color="inherit"
                     size="small"
                     href="/dashboard/import-numbers"
@@ -177,7 +190,7 @@ const Page = () => {
                     }
                   >
                     Export
-                  </Button>
+                  </Button> */}
                 </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
@@ -191,6 +204,23 @@ const Page = () => {
                   variant="contained"
                 >
                   Add
+                </Button>
+              </Stack>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
+              <Stack spacing={1} direction="row" alignItems="center" sx={{ ml: 2}}>
+                <Typography variant="h6">Unfiltered Numbers</Typography>
+                <Typography variant="h5">{numbersStore.unfiltered}</Typography>
+                <Button
+                  startIcon={
+                    <SvgIcon>
+                      <FilterFunnel01 />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                  onClick={handleFilter}
+                >
+                  Filter Landline Mobile
                 </Button>
               </Stack>
             </Stack>
@@ -218,6 +248,14 @@ const Page = () => {
           </Stack>
         </Container>
       </Box>
+      <CreditCardPayment
+          amount={numbersStore.unfiltered * 0.08}
+          processResult={handleProcessResult}
+          openPayment={openCardPayment}
+          paymentDescription={`You have to pay ${numbersStore.unfiltered} * $0.08 = $${numbersStore.unfiltered*0.08} to process filtering line. Make sure you have added payment method.`}
+          payButtonText={"Pay and Proceed"}
+          dialogTitle={"Filter landline or mobile"}
+          onClose={handlePaymentClose} />
     </>
   );
 };

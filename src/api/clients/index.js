@@ -13,7 +13,7 @@ class ClientsApi {
   getClients = async (force, request = {}) => {
     console.log('getClients request >>> ', request)
     const { filters, page, rowsPerPage, sortBy, sortDir } = request
-    if (force && this.clients.length == 0) {
+    if (force || this.clients.length == 0) {
       try {
         const response = await axios.get(`${SERVER_URL}/clients`, {
           headers: {
