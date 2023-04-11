@@ -10,8 +10,9 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
+import { paths } from "src/paths";
 
-export const OverviewDoneTasks = (props) => {
+export const OverviewSMSMonth = (props) => {
   const { amount } = props;
 
   return (
@@ -43,6 +44,7 @@ export const OverviewDoneTasks = (props) => {
       <Divider />
       <CardActions>
         <Button
+          href={paths.dashboard.smsHistory}
           color="inherit"
           endIcon={
             <SvgIcon>
@@ -58,6 +60,6 @@ export const OverviewDoneTasks = (props) => {
   );
 };
 
-OverviewDoneTasks.propTypes = {
+OverviewSMSMonth.propTypes = {
   amount: PropTypes.number.isRequired,
 };

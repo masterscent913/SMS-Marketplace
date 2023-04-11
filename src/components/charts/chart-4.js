@@ -11,13 +11,6 @@ import { useTheme } from '@mui/material/styles'
 import { Chart } from 'src/components/chart'
 import { Scrollbar } from 'src/components/scrollbar'
 
-const chartSeries = [
-  {
-    name: 'Performance',
-    data: [10, 5, 11, 20, 13, 28, 18, 4, 13, 12, 13, 5]
-  }
-]
-
 const useChartOptions = () => {
   const theme = useTheme()
 
@@ -99,7 +92,7 @@ const useChartOptions = () => {
     },
     yaxis: {
       labels: {
-        formatter: value => (value > 0 ? `${value}K` : `${value}`),
+        formatter: value => (value > 0 ? `${value}` : `${value}`),
         offsetX: -10,
         style: {
           colors: theme.palette.text.secondary
@@ -109,8 +102,9 @@ const useChartOptions = () => {
   }
 }
 
-export const Chart4 = () => {
+export const Chart4 = (props) => {
   const chartOptions = useChartOptions()
+  const { chartSeries } = props;
 
   return (
     <Box

@@ -8,8 +8,12 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Button, DialogActions, DialogContentText, Typography } from '@mui/material'
 import axios from 'axios'
 import { SERVER_URL } from 'src/constants'
+import { useAuth } from 'src/hooks/use-auth'
 
 function CreditCardPayment (props) {
+
+  const { user } = useAuth();
+
   const {
     onClose,
     openPayment,
@@ -27,18 +31,25 @@ function CreditCardPayment (props) {
   const handleProceed = async () => {
     console.log('handleProceed');
     try {
-      const response = await axios.post(`${SERVER_URL}/payCredit`, {
+      const response = await axios.post(`${SERVER_URL}/payCredit`, 
+      {
+        userid: user.id,
+        amount: amount
+      },
+      {
         headers: {
           'Content-Type': 'application/json'
         }
       })
-
       if (response.status === 200) {
+        setPaymentCompleted(true);
       } else {
         // toast.error("Password Incorrect.");
+        setPaymentCompleted(false);
       }
     } catch (err) {
       console.error('=========Error========', err)
+      setPaymentCompleted(false);
     }
   }
 

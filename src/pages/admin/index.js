@@ -12,10 +12,10 @@ import {
 import { Seo } from 'src/components/seo'
 import { usePageView } from 'src/hooks/use-page-view'
 import { useSettings } from 'src/hooks/use-settings'
-import { OverviewDoneTasks } from 'src/sections/dashboard/overview/overview-done-tasks'
-import { OverviewPendingIssues } from 'src/sections/dashboard/overview/overview-pending-issues'
-import { OverviewSubscriptionUsage } from 'src/sections/dashboard/overview/overview-subscription-usage'
-import { OverviewOpenTickets } from 'src/sections/dashboard/overview/overview-open-tickets'
+import { OverviewDoneTasks } from 'src/sections/admin/overview/overview-done-tasks'
+import { OverviewPendingIssues } from 'src/sections/admin/overview/overview-pending-issues'
+import { OverviewSubscriptionUsage } from 'src/sections/admin/overview/overview-subscription-usage'
+import { OverviewOpenTickets } from 'src/sections/admin/overview/overview-open-tickets'
 
 const now = new Date()
 

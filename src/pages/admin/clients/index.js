@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
-import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
 import {
   Box,
   Button,

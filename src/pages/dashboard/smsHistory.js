@@ -1,49 +1,152 @@
-import RefreshCcw01Icon from "@untitled-ui/icons-react/build/esm/RefreshCcw01";
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus'
 import {
   Box,
   Button,
+  Card,
   Container,
   Stack,
   SvgIcon,
-  Typography,
-  Unstable_Grid2 as Grid,
-} from "@mui/material";
-import { Seo } from "src/components/seo";
-import { usePageView } from "src/hooks/use-page-view";
-import { useSettings } from "src/hooks/use-settings";
-import { MailList } from "src/sections/dashboard/mail/mail-list";
+  Typography
+} from '@mui/material'
+import { smsApi } from 'src/api/sms'
+import { Seo } from 'src/components/seo'
+import { useMounted } from 'src/hooks/use-mounted'
+import { usePageView } from 'src/hooks/use-page-view'
+import { useSelection } from 'src/hooks/use-selection'
+import { SMSListSearch } from 'src/sections/dashboard/sms/sms-list-search'
+import { SMSListTable } from 'src/sections/dashboard/sms/sms-list-table'
+import { paths } from 'src/paths'
+import { useAuth } from 'src/hooks/use-auth'
+
+const useSMSSearch = () => {
+  const [state, setState] = useState({
+    filters: {
+      query: undefined
+    },
+    page: 0,
+    rowsPerPage: 5
+  })
+
+  const handleFiltersChange = useCallback(filters => {
+    setState(prevState => ({
+      ...prevState,
+      filters
+    }))
+  }, [])
+
+  const handlePageChange = useCallback((event, page) => {
+    setState(prevState => ({
+      ...prevState,
+      page
+    }))
+  }, [])
+
+  const handleRowsPerPageChange = useCallback(event => {
+    setState(prevState => ({
+      ...prevState,
+      rowsPerPage: parseInt(event.target.value, 10)
+    }))
+  }, [])
+
+  return {
+    handleFiltersChange,
+    handlePageChange,
+    handleRowsPerPageChange,
+    state
+  }
+}
+
+const useSMSStore = searchState => {
+  const isMounted = useMounted()
+  const [state, setState] = useState({
+    sms: [],
+    smsCount: 0
+  })
+  const { user } = useAuth()
+
+  const handleSMSGet = useCallback(
+    async (force = true) => {
+      try {
+        const response = await smsApi.getSMS(force, user.id, searchState)
+        if (isMounted()) {
+          setState({
+            sms: response.data,
+            smsCount: response.count
+          })
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [searchState, isMounted]
+  )
+
+  useEffect(() => {
+    handleSMSGet()
+  }, [searchState])
+  return {
+    ...state
+  }
+}
+
+const useSMSsIds = (smss = []) => {
+  return useMemo(() => {
+    return smss.map(sms => sms.id)
+  }, [smss])
+}
 
 const Page = () => {
-  const settings = useSettings();
+  const smsSearch = useSMSSearch()
+  const smsStore = useSMSStore(smsSearch.state)
+  const smssIds = useSMSsIds(smsStore.sms)
+  const smsSelection = useSelection(smssIds)
 
-  usePageView();
+  usePageView()
 
   return (
     <>
-      <Seo title="Dashboard: SMS History" />
+      <Seo title='Dashboard: SMS List' />
       <Box
-        component="main"
+        component='main'
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 8
         }}
       >
-        <Container maxWidth={settings.stretch ? false : "xl"}>
-          <Grid
-            container
-            spacing={{
-              xs: 3,
-              lg: 4,
-            }}
-          >
-            <Grid xs={12}>
-              <MailList currentLabelId={"all"} onSidebarToggle={() => {}} />
-            </Grid>
-          </Grid>
+        <Container maxWidth='xl'>
+          <Stack spacing={4}>
+            <Stack direction='row' justifyContent='space-between' spacing={4}>
+              <Stack spacing={1}>
+                <Typography variant='h4'>SMS History</Typography>
+              </Stack>
+            </Stack>
+            <Card>
+              <SMSListSearch
+                onFiltersChange={smsSearch.handleFiltersChange}
+                onSortChange={smsSearch.handleSortChange}
+                sortBy={smsSearch.state.sortBy}
+                sortDir={smsSearch.state.sortDir}
+              />
+              <SMSListTable
+                count={smsStore.smsCount}
+                items={smsStore.sms}
+                onDeselectAll={smsSelection.handleDeselectAll}
+                onDeselectOne={smsSelection.handleDeselectOne}
+                onPageChange={smsSearch.handlePageChange}
+                onRowsPerPageChange={smsSearch.handleRowsPerPageChange}
+                onSelectAll={smsSelection.handleSelectAll}
+                onSelectOne={smsSelection.handleSelectOne}
+                page={smsSearch.state.page}
+                rowsPerPage={smsSearch.state.rowsPerPage}
+                selected={smsSelection.selected}
+              />
+            </Card>
+          </Stack>
         </Container>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

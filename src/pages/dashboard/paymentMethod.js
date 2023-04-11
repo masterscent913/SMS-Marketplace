@@ -57,7 +57,7 @@ const CreditCardExpirationMask = React.forwardRef(
     return (
       <IMaskInput
         {...other}
-        mask='00 / 00'
+        mask='00/00'
         definitions={{
           '#': /[1-9]/
         }}
@@ -108,7 +108,8 @@ const Page = () => {
       `${SERVER_URL}/setpayment`,
       {
         ...billing,
-        userid: user.id
+        userid: user.id,
+        email: user.email
       },
       {
         headers: {
@@ -133,7 +134,7 @@ const Page = () => {
         const response = await axios.post(
           `${SERVER_URL}/paymentquery`,
           {
-            userid: window.name
+            userid: user.id
           },
           {
             headers: {
@@ -146,7 +147,7 @@ const Page = () => {
         if (response.data[0] !== undefined) {
           setBilling(prevState => ({
             ...prevState,
-            cardExpirationDate: response.data[0].cardExpirationDate,
+            cardExpirationDate: response.data[0].expiredate,
             cardNumber: response.data[0].cardnumber,
             cardOwner: response.data[0].cardname,
             cardSecurityCode: response.data[0].securitycode
@@ -232,7 +233,7 @@ const Page = () => {
                           label='Expire Date'
                           name='cardExpirationDate'
                           onChange={handleBillingChange}
-                          placeholder='MM / YY'
+                          placeholder='MM/YY'
                           inputComponent={CreditCardExpirationMask}
                           value={billing.cardExpirationDate}
                         />

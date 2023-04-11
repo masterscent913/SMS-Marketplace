@@ -110,27 +110,32 @@ class NumbersApi {
     })
   }
 
-  filterNumbers = async () => {
-    try {
-      const response = await axios.post(
-        `${SERVER_URL}/filterNumbers`,
-        {
-          headers: {
-            'Content-Type': 'application/json'
+  filterNumbers = async (userId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios.post(
+          `${SERVER_URL}/filterNumbers`,
+          {
+            userid: userId
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
           }
+        )
+        if (response.status === 200) {
+          return resolve({
+            success: true
+          })
+        } else {
+          return reject(new Error('Filter failed'))
         }
-      )
-      if (response.status === 200) {
-        resolve({
-          success: true
-        })
-      } else {
-        reject(new Error('Filter failed'))
+      } catch (err) {
+        console.error('=========Error========', err)
+        return reject(new Error('Internal server error'))
       }
-    } catch (err) {
-      console.error('=========Error========', err)
-      reject(new Error('Internal server error'))
-    }
+    });
   }
 
   getNumber (request) {

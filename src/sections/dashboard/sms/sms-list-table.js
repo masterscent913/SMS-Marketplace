@@ -22,10 +22,11 @@ import {
 import { RouterLink } from 'src/components/router-link'
 import { Scrollbar } from 'src/components/scrollbar'
 import { paths } from 'src/paths'
-import { getInitials } from 'src/utils/get-initials'
 import { SeverityPill } from 'src/components/severity-pill'
+import { getInitials } from 'src/utils/get-initials'
+import toast from 'react-hot-toast'
 
-export const NumberListTable = props => {
+export const SMSListTable = props => {
   const {
     count = 0,
     items = [],
@@ -37,12 +38,13 @@ export const NumberListTable = props => {
     onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = []
+    selected = [],
+    onDelete
   } = props
 
   const selectedSome = selected.length > 0 && selected.length < items.length
   const selectedAll = items.length > 0 && selected.length === items.length
-  const enableBulkActions = selected.length > 0
+  const enableBulkActions = false;//selected.length > 0
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -83,11 +85,10 @@ export const NumberListTable = props => {
           </Button> */}
         </Stack>
       )}
-      {/* <Scrollbar> */}
       <Table sx={{ minWidth: 700 }}>
         <TableHead>
           <TableRow>
-            <TableCell padding='checkbox'>
+            {/* <TableCell padding='checkbox'>
               <Checkbox
                 checked={selectedAll}
                 indeterminate={selectedSome}
@@ -99,65 +100,87 @@ export const NumberListTable = props => {
                   }
                 }}
               />
-            </TableCell>
+            </TableCell> */}
             <TableCell>Number</TableCell>
-            <TableCell>Type</TableCell>
+            <TableCell>Content</TableCell>
             <TableCell>Status</TableCell>
-            {/* <TableCell align='right'>Actions</TableCell> */}
+            <TableCell>DateTime</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map(number => {
-            const isSelected = selected.includes(number.id)
-            const statusColor =
-              number.status === 'subscribed' ? 'success' : 'info'
+          {items.map(sms => {
+            const isSelected = selected.includes(sms.id)
+            const statusColor = sms.send_status === '1' ? 'success' : 'info'
 
             return (
-              <TableRow hover key={number.id} selected={isSelected}>
-                <TableCell padding='checkbox'>
+              <TableRow hover key={sms.id} selected={isSelected}>
+                {/* <TableCell padding='checkbox'>
                   <Checkbox
                     checked={isSelected}
                     onChange={event => {
                       if (event.target.checked) {
-                        onSelectOne?.(number.id)
+                        onSelectOne?.(sms.id)
                       } else {
-                        onDeselectOne?.(number.id)
+                        onDeselectOne?.(sms.id)
                       }
                     }}
                     value={isSelected}
                   />
+                </TableCell> */}
+                {/* <TableCell>
+                    <Stack alignItems="center" direction="row" spacing={1}>
+                      <Avatar
+                        src={client.avatar}
+                        sx={{
+                          height: 42,
+                          width: 42,
+                        }}
+                      >
+                        {getInitials(client.name)}
+                      </Avatar> 
+                      <div>
+                        <Link
+                          color="inherit"
+                          component={RouterLink}
+                          href={paths.admin.clients.details.replace(
+                            ":clientId",
+                            client.id
+                          )}
+                          variant="subtitle2"
+                        >
+                          {client.name}
+                        </Link>
+                        <Typography color="text.secondary" variant="body2">
+                          {client.email}
+                        </Typography>
+                      </div>
+                    </Stack>
+                  </TableCell> */}
+                <TableCell>
+                  <Typography color='text.secondary' variant='body2'>
+                    {sms.number}
+                  </Typography>
                 </TableCell>
-                <TableCell>{number.number}</TableCell>
-                <TableCell>{number.type}</TableCell>
+                <TableCell>
+                  <Typography color='text.secondary' variant='body2'>
+                    {sms.content}
+                  </Typography>
+                </TableCell>
                 <TableCell>
                   <SeverityPill color={statusColor}>
-                    {number.status}
+                    {sms.send_status ? 'SENT' : 'PENDING'}
                   </SeverityPill>
                 </TableCell>
-                {/* <TableCell align='right'>
-                  <IconButton
-                    component={RouterLink}
-                    href={paths.dashboard.numbers.edit}
-                  >
-                    <SvgIcon>
-                      <Edit02Icon />
-                    </SvgIcon>
-                  </IconButton>
-                  <IconButton
-                    component={RouterLink}
-                    href={paths.dashboard.numbers.details}
-                  >
-                    <SvgIcon>
-                      <ArrowRightIcon />
-                    </SvgIcon>
-                  </IconButton>
-                </TableCell> */}
+                <TableCell>
+                  <Typography color='text.secondary' variant='body2'>
+                    {new Date(sms.send_at * 1000).toLocaleString()}
+                  </Typography>
+                </TableCell>
               </TableRow>
             )
           })}
         </TableBody>
       </Table>
-      {/* </Scrollbar> */}
       <TablePagination
         component='div'
         count={count}
@@ -171,7 +194,7 @@ export const NumberListTable = props => {
   )
 }
 
-NumberListTable.propTypes = {
+SMSListTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,
@@ -182,5 +205,6 @@ NumberListTable.propTypes = {
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
+  selected: PropTypes.array,
+  onDelete: PropTypes.func
 }

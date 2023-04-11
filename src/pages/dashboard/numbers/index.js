@@ -25,6 +25,7 @@ import CreditCardPayment from "../creditCardPayment";
 
 import axios from 'axios';
 import { useAuth } from "src/hooks/use-auth";
+import { toast } from "react-hot-toast";
 
 
 const useNumbersSearch = () => {
@@ -114,6 +115,7 @@ const useNumbersStore = (searchState) => {
 
   return {
     ...state,
+    handleNumbersGet
   };
 };
 
@@ -128,6 +130,30 @@ const Page = () => {
   const numbersStore = useNumbersStore(numbersSearch.state);
   const numbersIds = useNumbersIds(numbersStore.numbers);
   const numbersSelection = useSelection(numbersIds);
+
+  const { user } = useAuth();
+
+  const setPaymentCompleted = async (result) => {
+    if (result) {
+      console.log('>>> paymentCompleted >>> ');
+      try {
+        await numbersApi.filterNumbers(user.id);
+        numbersStore.handleNumbersGet();
+        toast.success('success');
+      } catch (err) {
+        console.log('err >>>', err);
+      }
+    } else {
+      console.log('>>> payment failed >>> ');
+      toast.error('Payment failed');
+    }
+    setOpenCardPayment(false);
+
+    // toast.success('Payment successful');
+    // setOpenCardPayment(false);
+    // setOpenCryptoPayment(false);
+    // setTicketPrice(new_ticket_price);
+  }
 
   const handleFilter = async () => {
     setOpenCardPayment(true);
@@ -249,10 +275,11 @@ const Page = () => {
         </Container>
       </Box>
       <CreditCardPayment
-          amount={numbersStore.unfiltered * 0.08}
+          amount={numbersStore.unfiltered * 0.5}
           processResult={handleProcessResult}
           openPayment={openCardPayment}
-          paymentDescription={`You have to pay ${numbersStore.unfiltered} * $0.08 = $${numbersStore.unfiltered*0.08} to process filtering line. Make sure you have added payment method.`}
+          setPaymentCompleted={setPaymentCompleted}
+          paymentDescription={`You have to pay ${numbersStore.unfiltered} * $0.5 = $${numbersStore.unfiltered*0.5} to process filtering line. Make sure you have added payment method.`}
           payButtonText={"Pay and Proceed"}
           dialogTitle={"Filter landline or mobile"}
           onClose={handlePaymentClose} />
