@@ -12,15 +12,55 @@ import {
 import { Seo } from 'src/components/seo'
 import { usePageView } from 'src/hooks/use-page-view'
 import { useSettings } from 'src/hooks/use-settings'
-import { OverviewDoneTasks } from 'src/sections/admin/overview/overview-done-tasks'
-import { OverviewPendingIssues } from 'src/sections/admin/overview/overview-pending-issues'
-import { OverviewSubscriptionUsage } from 'src/sections/admin/overview/overview-subscription-usage'
-import { OverviewOpenTickets } from 'src/sections/admin/overview/overview-open-tickets'
+import { OverviewSMSMonth } from 'src/sections/admin/overview/overview-sms-month'
+import { OverviewSMSWeek } from 'src/sections/admin/overview/overview-sms-week'
+import { OverviewSMSAnalytics } from 'src/sections/admin/overview/overview-sms-analytics'
+import { OverviewSMSYear } from 'src/sections/admin/overview/overview-sms-year'
+import { useAuth } from 'src/hooks/use-auth'
+import { smsApi } from 'src/api/sms'
+import { useEffect, useState } from 'react'
 
 const now = new Date()
 
 const Page = () => {
   const settings = useSettings()
+  const { user } = useAuth();
+  const [weekCount, setWeekCount] = useState(0);
+  const [monthCount, setMonthCount] = useState(0);
+  const [yearCount, setYearCount] = useState(0);
+  const [chartSeries, setChartSeries] = useState([
+    {
+      name: 'SMS',
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }
+  ]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await smsApi.getAdminSMSAnalytics();
+        if (data != null) {
+          setWeekCount(data.week);
+          setMonthCount(data.month);
+          setYearCount(data.year);
+          let chartdata = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+          data.analytics.forEach((analytic) => {
+            chartdata[analytic.month] = analytic.count;
+          });
+          let seriesData = [
+            {
+              name: 'SMS',
+              data: chartdata
+            }
+          ];
+          setChartSeries(seriesData);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getData();
+  }, []);
 
   usePageView()
 
@@ -48,43 +88,20 @@ const Page = () => {
                 <div>
                   <Typography variant='h4'>Overview</Typography>
                 </div>
-                {/* <div>
-                  <Stack direction="row" spacing={4}>
-                    <Button
-                      startIcon={
-                        <SvgIcon>
-                          <PlusIcon />
-                        </SvgIcon>
-                      }
-                      variant="contained"
-                    >
-                      New Dashboard
-                    </Button>
-                  </Stack>
-                </div> */}
               </Stack>
             </Grid>
             <Grid xs={12} md={4}>
-              <OverviewPendingIssues amount={12} />
+              <OverviewSMSWeek amount={weekCount} />
             </Grid>
             <Grid xs={12} md={4}>
-              <OverviewDoneTasks amount={31} />
+              <OverviewSMSMonth amount={monthCount} />
             </Grid>
             <Grid xs={12} md={4}>
-              <OverviewOpenTickets amount={5} />
+              <OverviewSMSYear amount={yearCount} />
             </Grid>
             <Grid xs={12} md={12}>
-              <OverviewSubscriptionUsage
-                chartSeries={[
-                  {
-                    name: 'This year',
-                    data: [40, 37, 41, 42, 45, 42, 36, 45, 40, 44, 38, 41]
-                  },
-                  {
-                    name: 'Last year',
-                    data: [26, 22, 19, 22, 24, 28, 23, 25, 24, 21, 17, 19]
-                  }
-                ]}
+              <OverviewSMSAnalytics
+                chartSeries={chartSeries}
               />
             </Grid>
           </Grid>

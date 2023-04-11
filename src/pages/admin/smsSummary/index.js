@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus'
 import {
   Box,
   Button,
@@ -7,163 +7,145 @@ import {
   Container,
   Stack,
   SvgIcon,
-  Typography,
-} from "@mui/material";
-import { clientsApi } from "src/api/clients";
-import { Seo } from "src/components/seo";
-import { useMounted } from "src/hooks/use-mounted";
-import { usePageView } from "src/hooks/use-page-view";
-import { useSelection } from "src/hooks/use-selection";
-import { ClientListSearch } from "src/sections/admin/smsSummary/client-list-search";
-import { ClientListTable } from "src/sections/admin/smsSummary/client-list-table";
+  Typography
+} from '@mui/material'
+import { smsApi } from 'src/api/sms'
+import { Seo } from 'src/components/seo'
+import { useMounted } from 'src/hooks/use-mounted'
+import { usePageView } from 'src/hooks/use-page-view'
+import { useSelection } from 'src/hooks/use-selection'
+import { SMSListSearch } from 'src/sections/admin/sms/sms-list-search'
+import { SMSListTable } from 'src/sections/admin/sms/sms-list-table'
+import { paths } from 'src/paths'
+import { useAuth } from 'src/hooks/use-auth'
 
-const useClientsSearch = () => {
+const useSMSSearch = () => {
   const [state, setState] = useState({
     filters: {
-      query: undefined,
-      subscribed: undefined,
-      unsubscribed: undefined,
-      landline: undefined,
-      mobile: undefined,
-      hasAcceptedMarketing: undefined,
-      isProspect: undefined,
-      isReturning: undefined,
+      query: undefined
     },
     page: 0,
-    rowsPerPage: 5,
-    sortBy: "updatedAt",
-    sortDir: "desc",
-  });
+    rowsPerPage: 5
+  })
 
-  const handleFiltersChange = useCallback((filters) => {
-    setState((prevState) => ({
+  const handleFiltersChange = useCallback(filters => {
+    setState(prevState => ({
       ...prevState,
-      filters,
-    }));
-  }, []);
-
-  const handleSortChange = useCallback((sort) => {
-    setState((prevState) => ({
-      ...prevState,
-      sortBy: sort.sortBy,
-      sortDir: sort.sortDir,
-    }));
-  }, []);
+      filters
+    }))
+  }, [])
 
   const handlePageChange = useCallback((event, page) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
-      page,
-    }));
-  }, []);
+      page
+    }))
+  }, [])
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    setState((prevState) => ({
+  const handleRowsPerPageChange = useCallback(event => {
+    setState(prevState => ({
       ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10),
-    }));
-  }, []);
+      rowsPerPage: parseInt(event.target.value, 10)
+    }))
+  }, [])
 
   return {
     handleFiltersChange,
-    handleSortChange,
     handlePageChange,
     handleRowsPerPageChange,
-    state,
-  };
-};
+    state
+  }
+}
 
-const useClientsStore = (searchState) => {
-  const isMounted = useMounted();
+const useSMSStore = searchState => {
+  const isMounted = useMounted()
   const [state, setState] = useState({
-    clients: [],
-    clientsCount: 0,
-  });
+    sms: [],
+    smsCount: 0
+  })
 
-  const handleClientsGet = useCallback(async () => {
-    try {
-      const response = await clientsApi.getClients(searchState);
-      if (isMounted()) {
-        setState({
-          clients: response.data,
-          clientsCount: response.count,
-        });
+  const handleSMSGet = useCallback(
+    async (force = true) => {
+      try {
+        const response = await smsApi.getAllSMS(force, searchState)
+        if (isMounted()) {
+          setState({
+            sms: response.data,
+            smsCount: response.count
+          })
+        }
+      } catch (err) {
+        console.error(err)
       }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [searchState, isMounted]);
-
-  useEffect(
-    () => {
-      handleClientsGet();
     },
-    
-    [searchState]
-  );
+    [searchState, isMounted]
+  )
 
+  useEffect(() => {
+    handleSMSGet()
+  }, [searchState])
   return {
-    ...state,
-  };
-};
+    ...state
+  }
+}
 
-const useClientsIds = (clients = []) => {
+const useSMSsIds = (smss = []) => {
   return useMemo(() => {
-    return clients.map((client) => client.id);
-  }, [clients]);
-};
+    return smss.map(sms => sms.id)
+  }, [smss])
+}
 
 const Page = () => {
-  const clientsSearch = useClientsSearch();
-  const clientsStore = useClientsStore(clientsSearch.state);
-  const clientsIds = useClientsIds(clientsStore.clients);
-  const clientsSelection = useSelection(clientsIds);
+  const smsSearch = useSMSSearch()
+  const smsStore = useSMSStore(smsSearch.state)
+  const smssIds = useSMSsIds(smsStore.sms)
+  const smsSelection = useSelection(smssIds)
 
-  usePageView();
+  usePageView()
 
   return (
     <>
-      <Seo title="Dashboard: SMS Summary List" />
+      <Seo title='Dashboard: SMS List' />
       <Box
-        component="main"
+        component='main'
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 8
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth='xl'>
           <Stack spacing={4}>
-            <Stack direction="row" justifyContent="space-between" spacing={4}>
+            <Stack direction='row' justifyContent='space-between' spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">SMS Summary List</Typography>
+                <Typography variant='h4'>SMS History</Typography>
               </Stack>
             </Stack>
             <Card>
-              <ClientListSearch
-                onFiltersChange={clientsSearch.handleFiltersChange}
-                onSortChange={clientsSearch.handleSortChange}
-                sortBy={clientsSearch.state.sortBy}
-                sortDir={clientsSearch.state.sortDir}
+              <SMSListSearch
+                onFiltersChange={smsSearch.handleFiltersChange}
+                onSortChange={smsSearch.handleSortChange}
+                sortBy={smsSearch.state.sortBy}
+                sortDir={smsSearch.state.sortDir}
               />
-              <ClientListTable
-                count={clientsStore.clientsCount}
-                items={clientsStore.clients}
-                onDeselectAll={clientsSelection.handleDeselectAll}
-                onDeselectOne={clientsSelection.handleDeselectOne}
-                onPageChange={clientsSearch.handlePageChange}
-                onRowsPerPageChange={clientsSearch.handleRowsPerPageChange}
-                onSelectAll={clientsSelection.handleSelectAll}
-                onSelectOne={clientsSelection.handleSelectOne}
-                page={clientsSearch.state.page}
-                rowsPerPage={clientsSearch.state.rowsPerPage}
-                selected={clientsSelection.selected}
+              <SMSListTable
+                count={smsStore.smsCount}
+                items={smsStore.sms}
+                onDeselectAll={smsSelection.handleDeselectAll}
+                onDeselectOne={smsSelection.handleDeselectOne}
+                onPageChange={smsSearch.handlePageChange}
+                onRowsPerPageChange={smsSearch.handleRowsPerPageChange}
+                onSelectAll={smsSelection.handleSelectAll}
+                onSelectOne={smsSelection.handleSelectOne}
+                page={smsSearch.state.page}
+                rowsPerPage={smsSearch.state.rowsPerPage}
+                selected={smsSelection.selected}
               />
             </Card>
           </Stack>
         </Container>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

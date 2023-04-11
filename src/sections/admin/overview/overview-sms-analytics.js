@@ -87,29 +87,29 @@ const useChartOptions = () => {
   };
 };
 
-export const OverviewSubscriptionUsage = (props) => {
+export const OverviewSMSAnalytics = (props) => {
   const { chartSeries } = props;
   const chartOptions = useChartOptions();
 
   return (
     <Card>
       <CardHeader
-        subheader="Based on the selected period"
-        title="SMS sent"
-        action={
-          <Tabs value="year">
-            <Tab label="Month" value="month" />
-            <Tab label="Week" value="week" />
-          </Tabs>
-        }
+        // subheader="Based on the selected period"
+        title="SMS Usage Analytics"
+        // action={
+        //   <Tabs value="year">
+        //     <Tab label="Month" value="month" />
+        //     <Tab label="Week" value="week" />
+        //   </Tabs>
+        // }
       />
       <Box>
-        <Chart4 />
+        <Chart4 chartSeries={chartSeries}/>
       </Box>
     </Card>
   );
 };
 
-OverviewSubscriptionUsage.propTypes = {
+OverviewSMSAnalytics.propTypes = {
   chartSeries: PropTypes.array.isRequired,
 };

@@ -1,7 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
-import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
-import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus'
 import {
   Box,
   Button,
@@ -9,163 +7,115 @@ import {
   Container,
   Stack,
   SvgIcon,
-  Typography,
-} from "@mui/material";
-import { clientsApi } from "src/api/clients";
-import { Seo } from "src/components/seo";
-import { useMounted } from "src/hooks/use-mounted";
-import { usePageView } from "src/hooks/use-page-view";
-import { useSelection } from "src/hooks/use-selection";
-import { ClientListSearch } from "src/sections/admin/paymentSummary/client-list-search";
-import { ClientListTable } from "src/sections/admin/paymentSummary/client-list-table";
+  Typography
+} from '@mui/material'
 
-const useClientsSearch = () => {
+import { payApi } from 'src/api/pay'
+import { Seo } from 'src/components/seo'
+import { useMounted } from 'src/hooks/use-mounted'
+import { usePageView } from 'src/hooks/use-page-view'
+import { useSelection } from 'src/hooks/use-selection'
+import { PayListTable } from 'src/sections/admin/paymentSummary/pay-list-table'
+import { paths } from 'src/paths'
+import { useAuth } from 'src/hooks/use-auth'
+
+const usePaySearch = () => {
   const [state, setState] = useState({
-    filters: {
-      query: undefined,
-      subscribed: undefined,
-      unsubscribed: undefined,
-      landline: undefined,
-      mobile: undefined,
-      hasAcceptedMarketing: undefined,
-      isProspect: undefined,
-      isReturning: undefined,
-    },
     page: 0,
-    rowsPerPage: 5,
-    sortBy: "updatedAt",
-    sortDir: "desc",
-  });
-
-  const handleFiltersChange = useCallback((filters) => {
-    setState((prevState) => ({
-      ...prevState,
-      filters,
-    }));
-  }, []);
-
-  const handleSortChange = useCallback((sort) => {
-    setState((prevState) => ({
-      ...prevState,
-      sortBy: sort.sortBy,
-      sortDir: sort.sortDir,
-    }));
-  }, []);
+    rowsPerPage: 5
+  })
 
   const handlePageChange = useCallback((event, page) => {
-    setState((prevState) => ({
+    setState(prevState => ({
       ...prevState,
-      page,
-    }));
-  }, []);
+      page
+    }))
+  }, [])
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    setState((prevState) => ({
+  const handleRowsPerPageChange = useCallback(event => {
+    setState(prevState => ({
       ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10),
-    }));
-  }, []);
+      rowsPerPage: parseInt(event.target.value, 10)
+    }))
+  }, [])
 
   return {
-    handleFiltersChange,
-    handleSortChange,
     handlePageChange,
     handleRowsPerPageChange,
-    state,
-  };
-};
+    state
+  }
+}
 
-const useClientsStore = (searchState) => {
-  const isMounted = useMounted();
+const usePayStore = searchState => {
+  const isMounted = useMounted()
   const [state, setState] = useState({
-    clients: [],
-    clientsCount: 0,
-  });
+    pays: [],
+    payCount: 0
+  })
 
-  const handleClientsGet = useCallback(async () => {
-    try {
-      const response = await clientsApi.getClients(searchState);
-      if (isMounted()) {
-        setState({
-          clients: response.data,
-          clientsCount: response.count,
-        });
+  const handlePayGet = useCallback(
+    async (force = true) => {
+      try {
+        const response = await payApi.getAllPay(force, searchState)
+        if (isMounted()) {
+          setState({
+            pays: response.data,
+            payCount: response.count
+          })
+        }
+      } catch (err) {
+        console.error(err)
       }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [searchState, isMounted]);
-
-  useEffect(
-    () => {
-      handleClientsGet();
     },
-    
-    [searchState]
-  );
+    [searchState, isMounted]
+  )
 
+  useEffect(() => {
+    handlePayGet()
+  }, [searchState])
   return {
-    ...state,
-  };
-};
-
-const useClientsIds = (clients = []) => {
-  return useMemo(() => {
-    return clients.map((client) => client.id);
-  }, [clients]);
-};
+    ...state
+  }
+}
 
 const Page = () => {
-  const clientsSearch = useClientsSearch();
-  const clientsStore = useClientsStore(clientsSearch.state);
-  const clientsIds = useClientsIds(clientsStore.clients);
-  const clientsSelection = useSelection(clientsIds);
+  const paySearch = usePaySearch()
+  const payStore = usePayStore(paySearch.state)
 
-  usePageView();
+  usePageView()
 
   return (
     <>
-      <Seo title="Dashboard: Payment Summary List" />
+      <Seo title='Dashboard: Pay List' />
       <Box
-        component="main"
+        component='main'
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 8
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth='xl'>
           <Stack spacing={4}>
-            <Stack direction="row" justifyContent="space-between" spacing={4}>
+            <Stack direction='row' justifyContent='space-between' spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Payment Summary List</Typography>
+                <Typography variant='h4'>Payment Summary</Typography>
               </Stack>
             </Stack>
             <Card>
-              <ClientListSearch
-                onFiltersChange={clientsSearch.handleFiltersChange}
-                onSortChange={clientsSearch.handleSortChange}
-                sortBy={clientsSearch.state.sortBy}
-                sortDir={clientsSearch.state.sortDir}
-              />
-              <ClientListTable
-                count={clientsStore.clientsCount}
-                items={clientsStore.clients}
-                onDeselectAll={clientsSelection.handleDeselectAll}
-                onDeselectOne={clientsSelection.handleDeselectOne}
-                onPageChange={clientsSearch.handlePageChange}
-                onRowsPerPageChange={clientsSearch.handleRowsPerPageChange}
-                onSelectAll={clientsSelection.handleSelectAll}
-                onSelectOne={clientsSelection.handleSelectOne}
-                page={clientsSearch.state.page}
-                rowsPerPage={clientsSearch.state.rowsPerPage}
-                selected={clientsSelection.selected}
+              <PayListTable
+                count={payStore.payCount}
+                items={payStore.pays}
+                onPageChange={paySearch.handlePageChange}
+                onRowsPerPageChange={paySearch.handleRowsPerPageChange}
+                page={paySearch.state.page}
+                rowsPerPage={paySearch.state.rowsPerPage}
               />
             </Card>
           </Stack>
         </Container>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
