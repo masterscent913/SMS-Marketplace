@@ -24,6 +24,9 @@ import { Scrollbar } from 'src/components/scrollbar'
 import { paths } from 'src/paths'
 import { getInitials } from 'src/utils/get-initials'
 import { SeverityPill } from 'src/components/severity-pill'
+import { numbersApi } from 'src/api/numbers'
+import { useAuth } from 'src/hooks/use-auth'
+import { toast } from 'react-hot-toast'
 
 export const NumberListTable = props => {
   const {
@@ -37,12 +40,24 @@ export const NumberListTable = props => {
     onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = []
+    selected = [],
+    onDeleteDone
   } = props
 
   const selectedSome = selected.length > 0 && selected.length < items.length
   const selectedAll = items.length > 0 && selected.length === items.length
   const enableBulkActions = selected.length > 0
+  const { user } = useAuth();
+
+  const handleDelete = async () => {
+    console.log('selected >>>', selected);
+    if (await numbersApi.deleteNumber({ id: user.id, numberIds: selected })) {
+      toast.success('Number deleted');
+      onDeleteDone.apply();
+    } else {
+      toast.error('Number delete failed');
+    }
+  }
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -75,7 +90,7 @@ export const NumberListTable = props => {
               }
             }}
           />
-          <Button color='inherit' size='small'>
+          <Button color='inherit' size='small' onClick={handleDelete}>
             Delete
           </Button>
           {/* <Button color="inherit" size="small">
@@ -182,5 +197,6 @@ NumberListTable.propTypes = {
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
+  selected: PropTypes.array,
+  onDeleteDone: PropTypes.func
 }

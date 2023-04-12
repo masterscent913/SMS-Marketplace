@@ -113,9 +113,14 @@ const useNumbersStore = (searchState) => {
     [searchState]
   );
 
+  const onDeleteNumberDone = () => {
+    handleNumbersGet(false);
+  }
+
   return {
     ...state,
-    handleNumbersGet
+    handleNumbersGet,
+    onDeleteNumberDone
   };
 };
 
@@ -269,6 +274,7 @@ const Page = () => {
                 page={numbersSearch.state.page}
                 rowsPerPage={numbersSearch.state.rowsPerPage}
                 selected={numbersSelection.selected}
+                onDeleteDone={numbersStore.onDeleteNumberDone}
               />
             </Card>
           </Stack>

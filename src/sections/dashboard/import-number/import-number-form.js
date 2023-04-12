@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
-import { numbersApi } from "src/api/numbers";
-import { useAuth } from "src/hooks/use-auth";
-import toast from "react-hot-toast";
+import { useCallback, useEffect, useRef, useState } from 'react'
+import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01'
+import { numbersApi } from 'src/api/numbers'
+import { useAuth } from 'src/hooks/use-auth'
+import toast from 'react-hot-toast'
+import CheckVerified01 from '@untitled-ui/icons-react/build/esm/CheckVerified01'
 
 import {
   Box,
@@ -18,28 +19,32 @@ import {
   SvgIcon,
   Stack,
   Input,
-  IconButton,
-} from "@mui/material";
-import { RemoveCircle } from "@mui/icons-material";
+  IconButton
+} from '@mui/material'
+import { RemoveCircle } from '@mui/icons-material'
 
 export const ImportNumberForm = () => {
-  const [file, setFile] = useState(null);
-  const { user } = useAuth();
-  const [numbers, setNumbers] = useState("");
+  const [file, setFile] = useState(null)
+  const { user } = useAuth()
+  const [numbers, setNumbers] = useState('')
+  const [duplicateCheckDone, setCheckDuplicateDone] = useState(false);
 
-  const handleSubmit = useCallback(async (event) => {
-    event.preventDefault();
-    let numArray = numbers.split(",");
-    console.log('numArray >>>', numArray);
-    if (user) {
-      try {
-        await numbersApi.submitNumber({id: user.id, numbers: numArray});
-        toast.success('Import number done');
-      } catch (error) {
-        toast.error('Import number failed');
+  const handleSubmit = useCallback(
+    async event => {
+      event.preventDefault()
+      let numArray = numbers.split(',')
+      console.log('numArray >>>', numArray)
+      if (user) {
+        try {
+          await numbersApi.submitNumber({ id: user.id, numbers: numArray })
+          toast.success('Import number done')
+        } catch (error) {
+          toast.error('Import number failed')
+        }
       }
-    }
-  }, [numbers]);
+    },
+    [numbers]
+  )
 
   // const fileInputRef = useRef(null);
   // const handleImport = useCallback(async () => {
@@ -62,11 +67,11 @@ export const ImportNumberForm = () => {
   //   fileInputRef.current.files = null;
   // };
 
-  const fileInputRef = useRef(null);
-  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef(null)
+  const [fileName, setFileName] = useState('')
 
-  const handleChangeNumber = (e) => {
-    setNumbers(e.target.value);
+  const handleChangeNumber = e => {
+    setNumbers(e.target.value)
   }
 
   // const handleSubmit = (e) => {
@@ -81,72 +86,108 @@ export const ImportNumberForm = () => {
   //   }
   // };
 
-  const handleFileChange = (e) => {
-    console.log("import click");
-    const file = e.target.files[0];
-    if (file && file.type === "text/csv") {
-      setFileName(file.name);
-      const reader = new FileReader();
+  const handleFileChange = e => {
+    console.log('import click')
+    const file = e.target.files[0]
+    if (file && file.type === 'text/csv') {
+      setFileName(file.name)
+      const reader = new FileReader()
       reader.onload = async function (e) {
-        const content = e.target.result;
-        await formik.setFieldValue("numbers", content);
+        const content = e.target.result
+        await formik.setFieldValue('numbers', content)
       }
-      reader.readAsText(file);
+      reader.readAsText(file)
     } else {
-      setFileName("");
+      setFileName('')
     }
-  };
+  }
 
   const handleRemoveClick = () => {
-    setFileName("");
-    fileInputRef.current.value = null;
-  };
+    setFileName('')
+    fileInputRef.current.value = null
+  }
 
   const handleImportClick = () => {
-    fileInputRef.current.click();
-  };
+    fileInputRef.current.click()
+  }
+
+  const handleCheckDuplicate = useCallback(
+    async event => {
+      event.preventDefault()
+      if (numbers.trim() == '')
+        return;
+      let numArray = numbers.split(',')
+      console.log('numArray >>>', numArray)
+      if (user) {
+        try {
+          let uniqueNumbers = await numbersApi.checkDuplicate({ id: user.id, numbers: numArray });
+          setNumbers(uniqueNumbers.join(','))
+          toast.success('Check duplicate done')
+          setCheckDuplicateDone(true);
+        } catch (error) {
+          console.error(error);
+          toast.error('Check duplicate failed')
+          setCheckDuplicateDone(false)
+        }
+      }
+    },
+    [numbers]
+  )
 
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={3}>
         <Grid xs={12}>
+          <Stack alignItems='center' direction='row' spacing={3}>
+            <Button
+              onClick={handleCheckDuplicate}
+              startIcon={
+                <SvgIcon>
+                  <CheckVerified01 />
+                </SvgIcon>
+              }
+              variant='contained'
+            >
+              Check Duplicate
+            </Button>
+          </Stack>
           <FormControl fullWidth>
             <Stack
-              alignItems="center"
-              justifyContent="space-between"
-              direction="row"
+              alignItems='center'
+              justifyContent='space-between'
+              direction='row'
               fullWidth
               spacing={1}
               sx={{ py: 2 }}
             >
               <FormLabel
                 sx={{
-                  color: "text.primary",
-                  mb: 1,
+                  color: 'text.primary',
+                  mb: 1
                 }}
               >
                 Import Numbers
               </FormLabel>
 
               <input
-                type="file"
+                type='file'
                 ref={fileInputRef}
                 onChange={handleFileChange}
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
               />
               {fileName ? (
-                <Stack align="content-center" direction="row">
+                <Stack align='content-center' direction='row'>
                   <p>{fileName}</p>
                   <IconButton onClick={handleRemoveClick}>
-                    <SvgIcon color="error" size="small">
+                    <SvgIcon color='error' size='small'>
                       <RemoveCircle />
                     </SvgIcon>
                   </IconButton>
                 </Stack>
               ) : (
                 <Button
-                  color="inherit"
-                  size="small"
+                  color='inherit'
+                  size='small'
                   onClick={handleImportClick}
                   startIcon={
                     <SvgIcon>
@@ -160,8 +201,8 @@ export const ImportNumberForm = () => {
             </Stack>
             <OutlinedInput
               fullWidth
-              name="numbers"
-              placeholder="Enter comma separated numbers"
+              name='numbers'
+              placeholder='Enter comma separated numbers'
               required
               value={numbers}
               onChange={handleChangeNumber}
@@ -173,15 +214,15 @@ export const ImportNumberForm = () => {
       </Grid>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          mt: 3,
+          display: 'flex',
+          justifyContent: 'center',
+          mt: 3
         }}
       >
-        <Button fullWidth size="large" type="submit" variant="contained">
+        <Button fullWidth size='large' type='submit' variant='contained'>
           Submit
         </Button>
       </Box>
     </form>
-  );
-};
+  )
+}

@@ -171,6 +171,69 @@ class NumbersApi {
       }
     })
   }
+
+  checkDuplicate (request) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios.post(
+          `${SERVER_URL}/checkduplicate`,
+          {
+            userid: request.id,
+            numbers: request.numbers
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        if (response.status === 200) {
+          resolve(response.data)
+        } else {
+          reject(new Error('Import number failed'))
+        }
+      } catch (err) {
+        console.error(err)
+        reject(new Error('Internal server error'))
+      }
+    })
+  }
+
+  deleteNumber (request) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios.post(
+          `${SERVER_URL}/deleteNumber`,
+          {
+            userid: request.id,
+            numberIds: request.numberIds
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        if (response.status === 200) {
+          request.numberIds.forEach(numberId => {
+            let index = this.numbers.findIndex(element => element.id == numberId);
+            if (index > -1) {
+              this.numbers.splice(index, 1);
+            }
+          });
+          resolve({result: true})
+        } else {
+          reject(new Error('Import number failed'))
+        }
+      } catch (err) {
+        console.error(err)
+        reject(new Error('Internal server error'))
+      }
+    })
+  }
+
 }
 
 export const numbersApi = new NumbersApi()
