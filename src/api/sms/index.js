@@ -190,6 +190,38 @@ class SMSApi {
     return null;
     // return Promise.resolve(deepCopy(client))
   }
+
+  deleteSMSHistory = async (client_id, histories) => {
+    try {
+      const response = await axios.post(`${SERVER_URL}/deletesms`, 
+      {
+        userid: client_id, 
+        histories: histories
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (response.status === 200) {
+        histories.forEach(smsid => {
+          let index = this.sms.findIndex(element => element.id == smsid);
+          if (index > -1) {
+            this.sms.splice(index, 1);
+          }
+        });
+        return true;
+      } else {
+        // toast.error("Password Incorrect.");
+      }
+    } catch (err) {
+      console.error('=========Error========', err)
+    }
+    return null;
+    // return Promise.resolve(deepCopy(client))
+  }
+
 }
 
 export const smsApi = new SMSApi()

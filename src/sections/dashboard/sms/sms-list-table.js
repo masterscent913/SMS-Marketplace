@@ -24,7 +24,9 @@ import { Scrollbar } from 'src/components/scrollbar'
 import { paths } from 'src/paths'
 import { SeverityPill } from 'src/components/severity-pill'
 import { getInitials } from 'src/utils/get-initials'
-import toast from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
+import { smsApi } from 'src/api/sms'
+import { useAuth } from 'src/hooks/use-auth'
 
 export const SMSListTable = props => {
   const {
@@ -39,12 +41,24 @@ export const SMSListTable = props => {
     page = 0,
     rowsPerPage = 0,
     selected = [],
-    onDelete
+    onDeleteHistory
   } = props
 
   const selectedSome = selected.length > 0 && selected.length < items.length
   const selectedAll = items.length > 0 && selected.length === items.length
-  const enableBulkActions = false;//selected.length > 0
+  const enableBulkActions = selected.length > 0
+
+  const { user } = useAuth();
+
+  const handleDeleteHistory = async () => {
+    console.log('selected >>>', selected);
+    if (await smsApi.deleteSMSHistory(user.id, selected)) {
+      toast.success('SMS deleted');
+      onDeleteHistory.apply();
+    } else {
+      toast.error('SMS delete failed');
+    }
+  }
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -77,7 +91,7 @@ export const SMSListTable = props => {
               }
             }}
           />
-          <Button color='inherit' size='small'>
+          <Button color='inherit' size='small' onClick={handleDeleteHistory}>
             Delete
           </Button>
           {/* <Button color="inherit" size="small">
@@ -88,7 +102,7 @@ export const SMSListTable = props => {
       <Table sx={{ minWidth: 700 }}>
         <TableHead>
           <TableRow>
-            {/* <TableCell padding='checkbox'>
+            <TableCell padding='checkbox'>
               <Checkbox
                 checked={selectedAll}
                 indeterminate={selectedSome}
@@ -100,7 +114,7 @@ export const SMSListTable = props => {
                   }
                 }}
               />
-            </TableCell> */}
+            </TableCell>
             <TableCell>Number</TableCell>
             <TableCell>Content</TableCell>
             <TableCell>Status</TableCell>
@@ -114,7 +128,7 @@ export const SMSListTable = props => {
 
             return (
               <TableRow hover key={sms.id} selected={isSelected}>
-                {/* <TableCell padding='checkbox'>
+                <TableCell padding='checkbox'>
                   <Checkbox
                     checked={isSelected}
                     onChange={event => {
@@ -126,7 +140,7 @@ export const SMSListTable = props => {
                     }}
                     value={isSelected}
                   />
-                </TableCell> */}
+                </TableCell>
                 {/* <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
@@ -206,5 +220,5 @@ SMSListTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
-  onDelete: PropTypes.func
+  onDeleteHistory: PropTypes.func
 }

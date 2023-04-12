@@ -85,8 +85,13 @@ const useSMSStore = searchState => {
   useEffect(() => {
     handleSMSGet()
   }, [searchState])
+
+  const handleDeleteHistory = () => {
+    handleSMSGet(false);
+  };
   return {
-    ...state
+    ...state,
+    handleDeleteHistory
   }
 }
 
@@ -140,6 +145,7 @@ const Page = () => {
                 page={smsSearch.state.page}
                 rowsPerPage={smsSearch.state.rowsPerPage}
                 selected={smsSelection.selected}
+                onDeleteHistory={smsStore.handleDeleteHistory}
               />
             </Card>
           </Stack>
