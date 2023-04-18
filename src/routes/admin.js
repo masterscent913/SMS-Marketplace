@@ -9,6 +9,7 @@ const ClientsCreatePage = lazy(() => import("src/pages/admin/clients/create"));
 const ClientsEditPage = lazy(() => import("src/pages/admin/clients/edit"));
 const ClientsDetailPage = lazy(() => import("src/pages/admin/clients/detail"));
 const AdminPage = lazy(() => import("src/pages/admin"));
+const SettingsPage = lazy(() => import("src/pages/admin/settings"));
 
 export const adminRoutes = [
   {
@@ -88,6 +89,15 @@ export const adminRoutes = [
           },
         ],
       },
+      {
+        path: 'settings',
+        children: [
+          {
+            index: true,
+            element: <SettingsPage />,
+          }
+        ]
+      }
     ],
   },
 ];

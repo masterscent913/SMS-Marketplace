@@ -127,12 +127,13 @@ class AuthApi {
         const decodedToken = jwt_decode(accessToken)
         console.log(' >>> decodeToken >>> ', decodedToken);
         // // Find the user
-        const { email, role, name, id } = decodedToken;
+        const { email, role, name, id, setting } = decodedToken;
         resolve({
           email: email,
           role: role,
           name: name, 
-          id: id
+          id: id,
+          setting: setting
         });
       } catch (err) {
         console.error('[Auth Api]: ', err)

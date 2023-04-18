@@ -105,7 +105,7 @@ const Page = () => {
 
   return (
     <>
-      <Seo title='Dashboard: SMS List' />
+      <Seo title='SMS Summary' />
       <Box
         component='main'
         sx={{

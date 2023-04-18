@@ -7,6 +7,7 @@ import HomeSmileIcon from "src/icons/untitled-ui/duocolor/home-smile";
 import LineChartUp04Icon from "src/icons/untitled-ui/duocolor/line-chart-up-04";
 import Mail03Icon from "src/icons/untitled-ui/duocolor/mail-03";
 import Mail04Icon from "src/icons/untitled-ui/duocolor/mail-04";
+import SettingsIcon from "src/icons/untitled-ui/duocolor/settings";
 import { tokens } from "src/locales/tokens";
 import { paths } from "src/paths";
 
@@ -50,6 +51,15 @@ export const useSections = () => {
             icon: (
               <SvgIcon fontSize="small">
                 <CurrencyBitcoinCircleIcon />
+              </SvgIcon>
+            ),
+          },
+          {
+            title: t(tokens.nav.settings),
+            path: paths.admin.settings,
+            icon: (
+              <SvgIcon fontSize="small">
+                < SettingsIcon/>
               </SvgIcon>
             ),
           },

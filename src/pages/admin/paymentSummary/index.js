@@ -86,7 +86,7 @@ const Page = () => {
 
   return (
     <>
-      <Seo title='Dashboard: Pay List' />
+      <Seo title='Payment Summary' />
       <Box
         component='main'
         sx={{

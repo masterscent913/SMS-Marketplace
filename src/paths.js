@@ -31,6 +31,7 @@ export const paths = {
     },
     smsSummary: "/admin/sms-summary",
     paymentSummary: "/admin/payment-summary",
+    settings: "/admin/settings",
   },
   401: "/401",
   404: "/404",

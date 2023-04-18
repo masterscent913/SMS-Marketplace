@@ -238,13 +238,13 @@ const Page = () => {
                   </Typography>
                   <Typography variant="h6">X</Typography>
 
-                  <Typography variant="h6">$0.5</Typography>
+                  <Typography variant="h6">${user.setting.sms_cost}</Typography>
                 </Box>
                 <Box display="flex" alignItems="center" gap={1}>
                   <Typography color="text.secondary" variant="body2">
                     Total
                   </Typography>
-                  <Typography variant="h6">${mobileNumbers.length * 0.5}</Typography>
+                  <Typography variant="h6">${mobileNumbers.length * user.setting.sms_cost}</Typography>
                 </Box>
               </Grid>
               <Grid xs={12} lg={8} spacing={2}>
@@ -271,11 +271,11 @@ const Page = () => {
         </Container>
       </Box>
       <CreditCardPayment
-          amount={mobileNumbers.length * 0.5}
+          amount={mobileNumbers.length * user.setting.sms_cost}
           processResult={handleProcessResult}
           openPayment={openCardPayment}
           setPaymentCompleted={setPaymentCompleted}
-          paymentDescription={`You have to pay ${mobileNumbers.length} * $0.5 = $${mobileNumbers.length*0.5} to send sms. Make sure you have added payment method.`}
+          paymentDescription={`You have to pay ${mobileNumbers.length} * $${user.setting.sms_cost} = $${mobileNumbers.length*user.setting.sms_cost} to send sms. Make sure you have added payment method.`}
           payButtonText={"Pay and Proceed"}
           dialogTitle={"Send SMS"}
           onClose={handlePaymentClose} />

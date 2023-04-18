@@ -281,11 +281,11 @@ const Page = () => {
         </Container>
       </Box>
       <CreditCardPayment
-          amount={numbersStore.unfiltered * 0.5}
+          amount={numbersStore.unfiltered * user.setting.sms_cost}
           processResult={handleProcessResult}
           openPayment={openCardPayment}
           setPaymentCompleted={setPaymentCompleted}
-          paymentDescription={`You have to pay ${numbersStore.unfiltered} * $0.5 = $${numbersStore.unfiltered*0.5} to process filtering line. Make sure you have added payment method.`}
+          paymentDescription={`You have to pay ${numbersStore.unfiltered} * $${user.setting.sms_cost} = $${(numbersStore.unfiltered*user.setting.sms_cost).toFixed(1)} to process filtering line. Make sure you have added payment method.`}
           payButtonText={"Pay and Proceed"}
           dialogTitle={"Filter landline or mobile"}
           onClose={handlePaymentClose} />

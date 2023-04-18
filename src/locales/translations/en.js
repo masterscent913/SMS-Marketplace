@@ -11,6 +11,7 @@ export const en = {
   [tokens.nav.clients]: "Clients",
   [tokens.nav.smsSummary]: "SMS Summary",
   [tokens.nav.paymentSummary]: "Payment Summary",
+  [tokens.nav.settings]: "Settings",
 
   [tokens.common.languageChanged]: "Language changed",
   [tokens.nav.academy]: "Academy",

@@ -12,6 +12,7 @@ export const tokens = {
     clients: "nav.clients",
     smsSummary: "nav.sms-summary",
     paymentSummary: "nav.payment-summary",
+    settings: "nav.settings",
     academy: "nav.academy",
     account: "nav.account",
     analytics: "nav.analytics",

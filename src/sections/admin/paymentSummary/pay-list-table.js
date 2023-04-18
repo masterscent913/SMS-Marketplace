@@ -51,7 +51,7 @@ export const PayListTable = props => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map(pay => {
+          {items.map((pay, index) => {
             return (
               <TableRow hover key={pay.id}>
                 <TableCell>
