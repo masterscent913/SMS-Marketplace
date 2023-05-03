@@ -27,10 +27,13 @@ import { ClientBasicDetails } from "src/sections/admin/client/client-basic-detai
 import { getInitials } from "src/utils/get-initials";
 import { ClientDataManagement } from "src/sections/admin/client/client-data-management";
 import { useLocation } from "react-router";
+import { useTranslation } from 'react-i18next';
+import { tokens } from "src/locales/tokens";
 
 const useClient = (clientId) => {
   const isMounted = useMounted();
   const [client, setClient] = useState(null);
+
 
   const handleClientGet = useCallback(async (clientId) => {
     try {
@@ -55,10 +58,8 @@ const useClient = (clientId) => {
 
 const Page = () => {
   const location = useLocation();
-  console.log('location.pathname >>>', location.pathname);
   const clientId = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
-  console.log('clientId >>>', clientId);
-
+  const { t } = useTranslation();
   const client = useClient(clientId);
   usePageView();
   if (!client) {
@@ -66,7 +67,6 @@ const Page = () => {
   }
 
   const onDeleteClick = async () => {
-    console.log('Delete Client >>>', clientId);
     if (await clientsApi.deleteClients([clientId])) {
       window.location.href = paths.admin.clients.index;
     }
@@ -74,7 +74,7 @@ const Page = () => {
 
   return (
     <>
-      <Seo title="Dashboard: Client Details" />
+      <Seo title={t(tokens.admin.dashboardClientDetails)} />
       <Box
         component="main"
         sx={{
@@ -99,7 +99,7 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Clients</Typography>
+                  <Typography variant="subtitle2">{t(tokens.common.clients)}</Typography>
                 </Link>
               </div>
               <Stack

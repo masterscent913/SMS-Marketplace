@@ -3,11 +3,14 @@ import ChevronDownIcon from '@untitled-ui/icons-react/build/esm/ChevronDown';
 import { Box, IconButton, Stack, SvgIcon, Typography } from '@mui/material';
 import { usePopover } from 'src/hooks/use-popover';
 import { TenantPopover } from './tenant-popover';
+import { useTranslation } from 'react-i18next';
+import { tokens } from "src/locales/tokens";
 
 const tenants = ['Devias', 'Acme Corp'];
 
 export const TenantSwitch = (props) => {
   const popover = usePopover();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -21,13 +24,13 @@ export const TenantSwitch = (props) => {
             color="inherit"
             variant="h6"
           >
-            SMS Marketplace
+            {t(tokens.project.title)}
           </Typography>
           <Typography
             color="neutral.400"
             variant="body2"
           >
-            Production
+            {t(tokens.project.release)}
           </Typography>
         </Box>
         {/* <IconButton

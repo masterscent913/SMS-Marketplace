@@ -2,9 +2,12 @@ import PropTypes from "prop-types";
 import { Box, Card, CardHeader, Tab, Tabs } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { Chart4 } from "src/components/charts/chart-4";
+import { useTranslation } from 'react-i18next';
+import { tokens } from "src/locales/tokens";
 
 const useChartOptions = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   return {
     chart: {
@@ -60,18 +63,18 @@ const useChartOptions = () => {
         show: false,
       },
       categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        t(tokens.common.jan),
+        t(tokens.common.feb),
+        t(tokens.common.mar),
+        t(tokens.common.apr),
+        t(tokens.common.may),
+        t(tokens.common.jun),
+        t(tokens.common.jul),
+        t(tokens.common.aug),
+        t(tokens.common.sep),
+        t(tokens.common.oct),
+        t(tokens.common.nov),
+        t(tokens.common.dec),
       ],
       labels: {
         style: {
@@ -90,12 +93,13 @@ const useChartOptions = () => {
 export const OverviewSMSAnalytics = (props) => {
   const { chartSeries } = props;
   const chartOptions = useChartOptions();
+  const { t } = useTranslation();
 
   return (
     <Card>
       <CardHeader
         // subheader="Based on the selected period"
-        title="SMS Usage Analytics"
+        title={t(tokens.common.smsUsageAnalytics)}
         // action={
         //   <Tabs value="year">
         //     <Tab label="Month" value="month" />

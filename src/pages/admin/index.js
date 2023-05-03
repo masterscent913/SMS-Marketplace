@@ -19,11 +19,14 @@ import { OverviewSMSYear } from 'src/sections/admin/overview/overview-sms-year'
 import { useAuth } from 'src/hooks/use-auth'
 import { smsApi } from 'src/api/sms'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next';
+import { tokens } from "src/locales/tokens";
 
 const now = new Date()
 
 const Page = () => {
-  const settings = useSettings()
+  const { t } = useTranslation();
+  const settings = useSettings();
   const { user } = useAuth();
   const [weekCount, setWeekCount] = useState(0);
   const [monthCount, setMonthCount] = useState(0);
@@ -86,7 +89,7 @@ const Page = () => {
             <Grid xs={12}>
               <Stack direction='row' justifyContent='space-between' spacing={4}>
                 <div>
-                  <Typography variant='h4'>Overview</Typography>
+                  <Typography variant='h4'>{t(tokens.nav.overview)}</Typography>
                 </div>
               </Stack>
             </Grid>

@@ -19,13 +19,17 @@ import { paths } from "src/paths";
 import { ClientEditForm } from "src/sections/admin/client/client-edit-form";
 import { getInitials } from "src/utils/get-initials";
 import { ClientCreateForm } from "src/sections/admin/client/client-create-form";
+import { useTranslation } from 'react-i18next';
+import { tokens } from "src/locales/tokens";
+
 const Page = () => {
+  const { t } = useTranslation();
 
   usePageView();
 
   return (
     <>
-      <Seo title="Dashboard: Client Create" />
+      <Seo title={t(tokens.common.dashboardClientCreate)} />
       <Box
         component="main"
         sx={{
@@ -50,7 +54,7 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Clients</Typography>
+                  <Typography variant="subtitle2">{t(tokens.common.clients)}</Typography>
                 </Link>
               </div>
             </Stack>

@@ -11,9 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import { paths } from "src/paths";
+import { useTranslation } from 'react-i18next';
+import { tokens } from "src/locales/tokens";
 
 export const OverviewSMSWeek = (props) => {
   const { amount } = props;
+  const { t } = useTranslation();
 
   return (
     <Card>
@@ -34,7 +37,7 @@ export const OverviewSMSWeek = (props) => {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <Typography color="text.secondary" variant="body2">
-            <strong>SMS</strong> / Week
+            <strong>{t(tokens.common.sms)}</strong> / {t(tokens.common.week)}
           </Typography>
           <Typography color="text.primary" variant="h4">
             {amount}
@@ -53,7 +56,7 @@ export const OverviewSMSWeek = (props) => {
           }
           size="small"
         >
-          See all SMS
+          {t(tokens.common.seeAllSMS)}
         </Button>
       </CardActions>
     </Card>
