@@ -138,7 +138,7 @@ const Page = () => {
 
   const { user } = useAuth();
 
-  const setPaymentCompleted = async (result) => {
+  const setPaymentCompleted = async (result, data) => {
     if (result) {
       console.log('>>> paymentCompleted >>> ');
       try {
@@ -150,7 +150,7 @@ const Page = () => {
       }
     } else {
       console.log('>>> payment failed >>> ');
-      toast.error('Payment failed');
+      toast.error(data.message);
     }
     setOpenCardPayment(false);
 
