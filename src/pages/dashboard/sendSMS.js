@@ -69,7 +69,7 @@ const Page = () => {
     },
   });
 
-  const setPaymentCompleted = async (result) => {
+  const setPaymentCompleted = async (result, data) => {
     if (result) {
       console.log('>>> payment success >>> ');
       let numbers = [];
@@ -105,7 +105,7 @@ const Page = () => {
       }
     } else {
       console.log('>>> payment failed >>> ');
-      toast.error('Payment failed');
+      toast.error(data.message);
     }
     setOpenCardPayment(false);
   }
