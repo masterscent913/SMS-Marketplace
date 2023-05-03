@@ -1,1 +1,1 @@
-export const SERVER_URL = "http://95.217.102.97:2480";
+export const SERVER_URL = "https://dev.goodmealtime.com/sms-api";
